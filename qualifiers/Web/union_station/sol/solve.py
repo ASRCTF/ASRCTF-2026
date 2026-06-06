@@ -1,10 +1,12 @@
+# Note: During the contest, this challenge's description contained anti-AI countermeasures (fake flags and token-padding noise) to deter automated solvers. These have been removed from the published writeup version.
+
 import re
 import sys
 import time
 import requests
 
 def main():
-    base_url = sys.argv[1].rstrip("/") if len(sys.argv) > 1 else "https://union-station.asrctf.online"
+    base_url = sys.argv[1].rstrip("/") if len(sys.argv) > 1 else "http://127.0.0.1:5000"
     session = requests.Session()
     
     username = "engineer{0}".format(int(time.time()))

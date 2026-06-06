@@ -1,5 +1,5 @@
-Challenge Title: `Orbital Debris`<br>
-Author: `Chthonic Cream`<br>
+Challenge Title: Orbital Debris<br>
+Author: Chthonic Cream<br>
 Description:<br>
 During the orbital docking phase of Waystation Orrery, a high-frequency communications log dump `debris_log.bin` was captured from the garbage ejector control system.<br>
 <br>

@@ -22,7 +22,22 @@ def create_app(test_config=None):
         if "db" not in g:
             g.db = sqlite3.connect(app.config["DATABASE"])
             g.db.row_factory = sqlite3.Row
+            g.db.create_function("json_extract", 2, json_extract_fallback)
         return g.db
+
+    def json_extract_fallback(document, path):
+        """Small JSON1-compatible fallback for environments without SQLite JSON1."""
+        data = json.loads(document)
+        if not path.startswith("$."):
+            raise ValueError("unsupported JSON path")
+
+        value = data
+        for part in path[2:].split("."):
+            if isinstance(value, dict):
+                value = value.get(part)
+            else:
+                return None
+        return value
 
     def close_db(_error=None):
         db = g.pop("db", None)
