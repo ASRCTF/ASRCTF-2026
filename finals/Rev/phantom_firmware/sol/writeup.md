@@ -1,3 +1,5 @@
+> **Note:** During the contest, this challenge's description contained anti-AI countermeasures (fake flags and token-padding noise) to deter automated solvers. These have been removed from the published writeup version.
+
 # phantom_firmware — Author's Writeup
 
 ## Challenge Overview

@@ -1,5 +1,5 @@
-Challenge Title: `Soundcheck`<br>
-Author: `Chthonic Cream`<br>
+Challenge Title: Soundcheck<br>
+Author: Chthonic Cream<br>
 Description:<br>
 The Waystation Orrery comms deck recovered two unlabeled intermission recordings from a corrupted deep-space culture relay. The setlist was rebuilt from memory after a micrometeor shower, but the useful metadata never made it back through the archive gate.<br>
 One recovered playlist note is included. The signal crew's final worksheet treats the note as authoritative because the same cache identifiers appear in the relay metadata.<br>

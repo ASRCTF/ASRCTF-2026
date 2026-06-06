@@ -1,3 +1,5 @@
+# Note: During the contest, this challenge's description contained anti-AI countermeasures (fake flags and token-padding noise) to deter automated solvers. These have been removed from the published writeup version.
+
 import json
 import re
 import sys
@@ -42,7 +44,7 @@ def main():
     import_response.raise_for_status()
 
     match = re.search(
-        r"Favorite quote:</strong>\s*(ASRCTF\{[^}]+\})",
+        r"FAVORITE QUOTE</span>\s*<span class=\"mv\">(ASRCTF\{[^}]+\})</span>",
         import_response.text,
     )
     if not match:

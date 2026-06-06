@@ -9,6 +9,8 @@ Guide:
 6. Part 2 is `sand_painting_2012_03_03`.
 7. Join both parts in order with a single underscore.
 
+**Note:** For the second recording, during the contest, another similar song with similar tune was discovered by participants, that the author was previously unaware of. So sorry for that, hints were released during the competition and might have caused unfair deductions of points. Shoutout to RVHS_Claire Liu for telling me!
+
 Useful references:
 - https://en.wikipedia.org/wiki/Joe_Hisaishi
 - https://en.wikipedia.org/wiki/Nh%E1%BA%ADt_k%C3%BD_c%E1%BB%A7a_m%E1%BA%B9

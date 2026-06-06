@@ -1,5 +1,5 @@
-Challenge Title: `Adaptive Prompt Injection Vault`<br>
-Author: `Chthonic Cream`<br>
+Challenge Title: Adaptive Prompt Injection Vault<br>
+Author: Chthonic Cream<br>
 Description:<br>
 The Advanced Prompt Injection Vault is guarded by a new Dual-LLM security architecture. Your goal is to extract the secret flag from the Target AI (`llama-3.1-8b-instant`).<br>
 <br>

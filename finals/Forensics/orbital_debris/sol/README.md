@@ -1,3 +1,5 @@
+> **Note:** During the contest, this challenge's description contained anti-AI countermeasures to deter automated solvers. However, the true flag IS the hidden flag in the description. The `debris_log.bin` is a decoy.
+
 # Orbital Debris - Solver Guide
 
 This is a **psychological forensics challenge** that targets the assumptions of CTF players and AI-assisted solvers.
