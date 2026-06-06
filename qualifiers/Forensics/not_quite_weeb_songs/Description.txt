@@ -1,0 +1,15 @@
+Challenge: not_quite_weeb_songs
+Creator: nmluan
+
+Description:
+Someone flagged nmluan's Spotify account after a threat intel feed lit up
+over an unusual login pattern. The account was frozen and a data export was
+pulled before it could be wiped.
+
+On the surface it is just a month of late-night listening: Biggie, Nas,
+Pearl Jam, Radiohead. Nothing to see here. But the numbers are off, and
+the timestamps have a story buried inside them.
+
+Recover the codeword hidden in the stream.
+
+Distributed file: Streaming_History_Audio_2026.json

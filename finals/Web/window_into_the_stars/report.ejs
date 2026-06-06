@@ -1,0 +1,12 @@
+<%- include('header') %>
+<h2>Report Anomalous Signal</h2>
+<p>If you've intercepted a signal on a remote terminal, provide the URL to the Lead Researcher.</p>
+<% if (typeof message !== 'undefined' && message) { %>
+    <div class="message"><%= message %></div>
+<% } %>
+<form action="/report" method="POST" class="form-container">
+    <label>Signal URL:</label>
+    <input type="url" name="url" placeholder="http://..." required>
+    <button type="submit" class="btn">Submit to Researcher</button>
+</form>
+<%- include('footer') %>

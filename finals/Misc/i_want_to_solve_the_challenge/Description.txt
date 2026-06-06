@@ -1,0 +1,10 @@
+Challenge: I Want To Solve The Challenge
+Creator: nmluan
+
+Description:
+enjoy.
+
+Distributed file: none
+Server: http://<host>:<port>
+
+TODO for infra: replace <host> and <port> placeholders

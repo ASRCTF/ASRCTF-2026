@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NebulaMart — VIP Auction Room</title>
+  <meta name="description" content="NebulaMart private auction room. Invitation-only access." />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪐</text></svg>" />
+  <style>
+    /* ── Lock Overlay ────────────────────────────────────────────── */
+    .lock-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .lock-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lock-icon {
+      font-size: 5rem;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 0 20px rgba(111,66,193,0.5));
+    }
+    .lock-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .lock-timer {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.5rem;
+      color: white;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      text-align: center;
+    }
+    .lock-timer span { color: var(--text-muted); font-size: 1rem; }
+
+    /* ── Auction room-specific styles ─────────────────────────────────────── */
+    .room-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 24px;
+      padding: 32px 0 48px;
+    }
+
+    @media (max-width: 900px) {
+      .room-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Artifact showcase */
+    .artifact-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .artifact-hero {
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      background: radial-gradient(ellipse at 50% 60%, rgba(155,89,255,0.2) 0%, rgba(108,142,245,0.1) 40%, transparent 70%),
+                  linear-gradient(180deg, #0d0d20 0%, #060612 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .artifact-hero::before {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240,192,64,0.12) 0%, transparent 70%);
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50%       { transform: scale(1.3); opacity: 0.3; }
+    }
+
+    .artifact-emoji {
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 30px rgba(240,192,64,0.6));
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .artifact-sold-banner {
+      position: absolute;
+      inset: 0;
+      background: rgba(3,220,151,0.12);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--success);
+      letter-spacing: 0.1em;
+      z-index: 2;
+      backdrop-filter: blur(4px);
+    }
+
+    .artifact-info {
+      padding: 28px;
+    }
+
+    .artifact-lot {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .artifact-name {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .artifact-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .artifact-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .meta-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+    }
+
+    .meta-label {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .meta-value {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Bid panel */
+    .bid-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .current-bid-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--glow-accent);
+    }
+
+    .current-bid-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .current-bid-amount {
+      font-size: 2.4rem;
+      font-weight: 800;
+      font-family: 'Space Mono', monospace;
+      color: var(--gold);
+      margin-bottom: 6px;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .current-bid-amount.updated {
+      transform: scale(1.08);
+      color: #fff;
+    }
+
+    .current-leader {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .current-leader strong { color: var(--text-primary); }
+
+    /* ── Wallet & Form Cards ─────────────────────────────────────── */
+    .wallet-card,
+    .bid-form-card,
+    .transfer-form-card {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      margin-bottom: 24px;
+    }
+
+    .wallet-title,
+    .bid-form-title,
+    .transfer-form-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .wallet-balance {
+      font-family: 'Space Mono', monospace;
+      font-size: 2.5rem;
+      color: var(--primary);
+      text-shadow: 0 0 20px rgba(111, 66, 193, 0.4);
+      margin: 0;
+    }
+
+    .bid-input-row,
+    .transfer-input-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .bid-input,
+    .transfer-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      padding: 0 16px;
+      font-size: 1.1rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .bid-input:focus,
+    .transfer-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.2);
+    }
+
+    .bid-btn,
+    .transfer-btn {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0 24px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .bid-btn:hover:not(:disabled),
+    .transfer-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(111, 66, 193, 0.4);
+    }
+
+    .bid-btn:disabled,
+    .transfer-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .bid-hint,
+    .transfer-hint {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Status indicator */
+    .ws-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .ws-status.connecting { background: rgba(255,160,64,0.1); color: var(--warning); border: 1px solid rgba(255,160,64,0.2); }
+    .ws-status.connected  { background: rgba(61,220,151,0.1); color: var(--success); border: 1px solid rgba(61,220,151,0.2); }
+    .ws-status.error      { background: rgba(255,90,122,0.1); color: var(--danger);  border: 1px solid rgba(255,90,122,0.2); }
+
+    .ws-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+
+    /* Feed */
+    .feed-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .feed-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .feed-list {
+      height: 320px;
+      overflow-y: auto;
+      padding: 12px 0;
+    }
+
+    .feed-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 20px;
+      animation: slideIn 0.3s ease;
+      transition: background 0.2s;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .feed-item:hover { background: rgba(255,255,255,0.02); }
+
+    .feed-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+    .feed-body { flex: 1; }
+
+    .feed-text {
+      font-size: 0.83rem;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .feed-text .bidder { color: var(--accent); font-weight: 700; }
+    .feed-text .amount { color: var(--gold); font-family: 'Space Mono', monospace; font-weight: 700; }
+    .feed-text .system { color: var(--text-muted); font-style: italic; }
+    .feed-text .flag-text { color: var(--success); font-weight: 700; font-family: 'Space Mono', monospace; word-break: break-all; }
+
+    .feed-time {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* Flag reveal */
+    .flag-reveal {
+      display: none;
+      background: linear-gradient(135deg, rgba(61,220,151,0.1) 0%, rgba(108,142,245,0.1) 100%);
+      border: 1px solid rgba(61,220,151,0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      animation: slideIn 0.5s ease;
+    }
+
+    .flag-reveal.visible { display: block; }
+
+    .flag-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--success);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
+    }
+
+    .flag-value {
+      font-size: 1.1rem;
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: rgba(0,0,0,0.3);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      word-break: break-all;
+      margin-bottom: 8px;
+    }
+
+    .flag-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Access denied */
+    .access-denied {
+      text-align: center;
+      padding: 80px 24px;
+    }
+
+    .access-denied .icon { font-size: 4rem; margin-bottom: 20px; }
+    .access-denied h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: var(--danger); }
+    .access-denied p { color: var(--text-muted); max-width: 400px; margin: 0 auto; line-height: 1.7; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="wrap nav-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">🪐</span>
+      Nebula<span>Mart</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Auctions</a></li>
+      <li><a href="#" class="active">VIP Room</a></li>
+    </ul>
+    <span class="nav-badge" id="room-badge">CONNECTING</span>
+  </div>
+</nav>
+
+<!-- ── Main Content ────────────────────────────────────────────────────────── -->
+<div class="wrap">
+
+  <!-- Access denied state (shown if no room param) -->
+  <div class="access-denied" id="access-denied-msg" style="display:none;">
+    <div class="icon">🔒</div>
+    <h2>Access Denied</h2>
+    <p>This is a private auction room. You need a valid room code to enter.<br /><br />
+    Connect with: <code style="color:var(--accent);">?room=YOUR_ROOM_ID</code></p>
+  </div>
+
+  <!-- Auction room layout -->
+  <div class="room-layout" id="auction-room" style="display:none;">
+
+    <!-- Left: Artifact showcase -->
+    <div style="position: relative;">
+      <div class="artifact-panel">
+        <div class="artifact-hero" id="artifact-hero">
+          <div class="artifact-sold-banner" id="sold-banner">🔨 SOLD</div>
+          <span class="artifact-emoji">🌠</span>
+        </div>
+        <div class="artifact-info">
+          <div class="artifact-lot">Lot #7Σ — Private VIP Auction</div>
+          <h1 class="artifact-name">Artifact 7-Sigma<br /><small style="font-size:0.6em;color:var(--text-muted);">The Stardust Shard</small></h1>
+          <p class="artifact-desc" id="artifact-desc">Connecting to auction room…</p>
+          <div class="artifact-meta">
+            <div class="meta-item">
+              <div class="meta-label">Age</div>
+              <div class="meta-value">4.6 Billion Yrs</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Origin</div>
+              <div class="meta-value">Kepler-442 System</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Specimens</div>
+              <div class="meta-value">3 Known</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Certification</div>
+              <div class="meta-value">Galactic Registry</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+      <div class="wallet-card" id="wallet-card">
+        <div class="wallet-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>💳 Your Wallet</span>
+          <span id="my-identity-badge" style="font-size: 0.75rem; color: var(--gold); background: rgba(240, 192, 64, 0.1); padding: 4px 8px; border-radius: 4px; display: none;"></span>
+        </div>
+        <div class="wallet-balance" id="wallet-balance-display">₢ 0</div>
+      </div>
+
+      <div class="ws-status connecting" id="ws-status">
+        <div class="ws-dot"></div>
+        <span id="ws-status-text">Connecting to auction room…</span>
+      </div>
+
+      <div class="current-bid-card">
+        <div class="current-bid-label">Current Highest Bid</div>
+        <div class="current-bid-amount" id="current-bid-display">₢ 0</div>
+        <div class="current-leader">Leader: <strong id="current-leader-name">—</strong></div>
+      </div>
+
+      <div class="bid-form-card" id="bid-form-card">
+        <div class="bid-form-title">💸 Place Your Bid</div>
+        <form id="bid-form" class="bid-input-row">
+          <input
+            type="number"
+            id="bid-amount-input"
+            class="bid-input"
+            placeholder="Enter amount in ₢"
+            min="1"
+            max="10000000"
+            required
+          />
+          <button type="submit" class="bid-btn" id="place-bid-btn" disabled>Bid</button>
+        </form>
+        <p class="bid-hint" id="bid-hint-text">
+          Max bid: <strong style="color:var(--gold);font-family:'Space Mono',monospace;">₢ 10,000,000</strong>.
+          Your bid must exceed the current highest bid.
+        </p>
+      </div>
+
+      <div class="transfer-form-card" id="transfer-form-card" style="padding: 16px;">
+        <div class="transfer-form-title" style="font-size: 0.9rem; margin-bottom: 12px;">🔄 Transfer Funds</div>
+        <form id="transfer-form" class="transfer-input-row" style="flex-direction: column;">
+          <input
+            type="text"
+            id="transfer-target-input"
+            class="transfer-input"
+            placeholder="Recipient Username"
+            required
+            style="padding: 8px 12px; font-size: 0.9rem;"
+          />
+          <div style="display: flex; gap: 8px;">
+            <input
+              type="number"
+              id="transfer-amount-input"
+              class="transfer-input"
+              placeholder="Amount"
+              min="1"
+              required
+              style="padding: 8px 12px; font-size: 0.9rem;"
+            />
+            <button type="submit" class="transfer-btn" id="transfer-btn" disabled style="padding: 0 16px; font-size: 0.9rem;">Send</button>
+          </div>
+        </form>
+        <p class="transfer-hint" id="transfer-hint-text" style="margin-top: 8px; font-size: 0.8rem;">
+          Send credits to another bidder. Non-reversible.
+        </p>
+      </div>
+
+      <!-- Flag reveal (shown on win) -->
+      <div class="flag-reveal" id="flag-reveal">
+        <div class="flag-label">🚀 You Won! Here Is Your Prize</div>
+        <div class="flag-value" id="flag-display"></div>
+        <div class="flag-sub">Congratulations — the Stardust Shard is yours.</div>
+      </div>
+
+      <div class="feed-card">
+        <div class="feed-header">📡 Live Auction Feed</div>
+        <div class="feed-list" id="feed-list">
+          <!-- feed items injected here -->
+        </div>
+      </div>
+
+      <!-- Lock Overlay (Future Auction) -->
+      <div class="lock-overlay" id="lock-overlay">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">Auction Pending</div>
+        <div class="lock-timer" id="lock-timer">
+          500,000 <span>YRS</span> : 00 <span>MO</span> : 00 <span>D</span> : 00 <span>H</span> : 00 <span>M</span> : 00 <span>S</span>
+        </div>
+        <p style="color:var(--text-muted); margin-top:24px; max-width:80%; text-align:center;">
+          This highly exclusive auction is scheduled for the far future. Spectator mode active.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="wrap footer-inner">
+    <p class="footer-copy">© 2147 NebulaMart Industries. VIP Room — Private & Confidential.</p>
+    <ul class="footer-links">
+      <li><a href="/">← Back to Auctions</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- ── Auction WebSocket Client ────────────────────────────────────────────── -->
+<script src="/vip.js"></script>
+
+</body>
+</html>

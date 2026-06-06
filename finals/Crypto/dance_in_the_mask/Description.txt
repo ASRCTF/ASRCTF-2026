@@ -1,0 +1,11 @@
+Challenge: Dance in the Mask
+Creator: nmluan
+
+Description:
+A signals researcher picked up a strange periodic broadcast from an old
+embedded weather node deep in the mountains. The hardware was decommissioned
+years ago, and nobody should have been talking to it.
+
+Someone was.
+
+Distributed files: traces.npy, encrypt.py

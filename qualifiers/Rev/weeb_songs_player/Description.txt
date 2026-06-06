@@ -1,0 +1,7 @@
+Challenge: weeb_songs_player
+Creator: nmluan
+
+Description:
+Looks like this MP3 player wants a valid serial before it'll play anything. Crack it open.
+
+Distributed file: weeb_songs_player

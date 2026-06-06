@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARGATE TERMINAL — ADMIN CONTROL PANEL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --void: #020408;
+      --deep: #050d18;
+      --panel: #071525;
+      --border: #0a2540;
+      --dim: #0e3060;
+      --cyan: #00d4ff;
+      --cyan-glow: rgba(0, 212, 255, 0.15);
+      --cyan-dim: rgba(0, 212, 255, 0.4);
+      --amber: #ff9f0a;
+      --amber-glow: rgba(255, 159, 10, 0.15);
+      --red: #ff3b3b;
+      --red-glow: rgba(255, 59, 59, 0.2);
+      --green: #39ff14;
+      --green-dim: rgba(57, 255, 20, 0.3);
+      --text: #a8c8e8;
+      --text-dim: #3a6080;
+      --scanline: rgba(0, 212, 255, 0.03);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    #starfield {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+    #starfield canvas { width: 100%; height: 100%; display: block; }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        var(--scanline) 2px,
+        var(--scanline) 4px
+      );
+      animation: scanmove 8s linear infinite;
+    }
+    @keyframes scanmove {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 100px; }
+    }
+
+    .page {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      padding: 0 clamp(1rem, 5vw, 4rem);
+    }
+
+    header {
+      padding: 2rem 0 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .logo-block { display: flex; flex-direction: column; gap: 0.3rem; }
+
+    .org-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.4rem, 4vw, 2.6rem);
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+      text-shadow: 0 0 20px var(--cyan), 0 0 60px var(--cyan-dim);
+      line-height: 1;
+    }
+
+    .logo span { color: var(--amber); text-shadow: 0 0 20px var(--amber); }
+
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-top: 0.2rem;
+    }
+
+    .header-status {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+    }
+
+    .status-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+    }
+
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    .dot.amber { background: var(--amber); box-shadow: 0 0 8px var(--amber); animation-delay: 0.6s; }
+    .dot.cyan  { background: var(--cyan);  box-shadow: 0 0 8px var(--cyan);  animation-delay: 0.2s; animation-duration: 2s; }
+    .dot.red   { background: var(--red);  box-shadow: 0 0 8px var(--red);  animation-delay: 0.4s; }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .alert-banner {
+      margin: 1.5rem 0;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--green);
+      background: var(--green-dim);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .alert-banner::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+    }
+    .alert-icon {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--green);
+      text-shadow: 0 0 10px var(--green);
+      flex-shrink: 0;
+    }
+    .alert-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      line-height: 1.6;
+      color: #aaffaa;
+    }
+    .alert-text strong { color: var(--green); text-shadow: 0 0 8px var(--green); }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: rgba(7, 21, 37, 0.85);
+      backdrop-filter: blur(4px);
+      position: relative;
+      overflow: hidden;
+    }
+    .panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan-dim), transparent);
+    }
+
+    .panel-header {
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: rgba(0, 212, 255, 0.03);
+    }
+
+    .panel-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: var(--cyan);
+      text-transform: uppercase;
+    }
+
+    .panel-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+
+    .panel-body { padding: 1.5rem; }
+
+    .flag-container {
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid var(--green);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      position: relative;
+      box-shadow: 0 0 30px var(--green-dim), inset 0 0 30px rgba(57, 255, 20, 0.1);
+    }
+
+    .flag-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px var(--green);
+    }
+
+    .flag-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--green);
+      background: rgba(57, 255, 20, 0.05);
+      padding: 1rem;
+      border: 1px solid rgba(57, 255, 20, 0.3);
+      word-break: break-all;
+      text-shadow: 0 0 8px var(--green);
+      user-select: all;
+    }
+
+    .info-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      gap: 1rem;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-key { color: var(--text-dim); letter-spacing: 0.1em; }
+    .info-val { color: var(--cyan); letter-spacing: 0.05em; text-align: right; }
+    .info-val.amber { color: var(--amber); }
+    .info-val.red   { color: var(--red); }
+    .info-val.green { color: var(--green); }
+
+    .terminal {
+      background: #010a10;
+      border: 1px solid var(--border);
+      padding: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1.8;
+      color: #2a6040;
+      max-height: 320px;
+      overflow-y: auto;
+      position: relative;
+    }
+    .terminal::before {
+      content: 'ADMIN LOG // REAL-TIME';
+      display: block;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.58rem;
+    }
+    .terminal .t-line { margin-bottom: 0.1rem; }
+    .terminal .t-time { color: var(--text-dim); }
+    .terminal .t-ok   { color: var(--green); }
+    .terminal .t-warn { color: var(--amber); }
+    .terminal .t-err  { color: var(--red); }
+    .terminal .t-cursor {
+      display: inline-block;
+      width: 7px; height: 12px;
+      background: var(--green);
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+      margin-left: 3px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .metric-card {
+      border: 1px solid var(--border);
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      transition: all 0.3s;
+    }
+
+    .metric-card:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px var(--cyan-glow);
+    }
+
+    .metric-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--cyan);
+      text-shadow: 0 0 10px var(--cyan);
+    }
+
+    .metric-value.green { color: var(--green); text-shadow: 0 0 10px var(--green); }
+    .metric-value.amber { color: var(--amber); text-shadow: 0 0 10px var(--amber); }
+    .metric-value.red { color: var(--red); text-shadow: 0 0 10px var(--red); }
+
+    footer {
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      line-height: 1.8;
+    }
+
+    .fade-in { animation: fadein 0.8s ease both; }
+    @keyframes fadein { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.35s; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--void); }
+    ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<div id="starfield"><canvas id="stars"></canvas></div>
+
+<div class="page">
+
+  <header class="fade-in">
+    <div class="logo-block">
+      <div class="org-tag">INTERSTELLAR DEFENSE NETWORK // OMEGA CLEARANCE</div>
+      <div class="logo">STAR<span>GATE</span> ADMIN</div>
+      <div class="subtitle">CENTRAL COMMAND CONTROL // UNRESTRICTED ACCESS</div>
+    </div>
+    <div class="header-status">
+      <div class="status-row"><div class="dot"></div> CORE SYSTEMS: ONLINE</div>
+      <div class="status-row"><div class="dot amber"></div> SECURITY: ELEVATED</div>
+      <div class="status-row"><div class="dot cyan"></div> ADMIN SESSION: ACTIVE</div>
+      <div class="status-row"><div class="dot red"></div> INTRUSION DETECTED</div>
+      <div class="status-row" id="clock" style="color:var(--text-dim); font-family:'Share Tech Mono',monospace; font-size:0.65rem; letter-spacing:0.1em;">--:--:-- UTC</div>
+    </div>
+  </header>
+
+  <div class="alert-banner fade-in delay-1">
+    <div class="alert-icon">✓</div>
+    <div class="alert-text">
+      <strong>ADMIN ACCESS GRANTED</strong> — Welcome, Commander. You have successfully bypassed all authentication layers.
+      Full system privileges enabled. The fleet coordination database and all classified operations data are now accessible.
+    </div>
+  </div>
+
+  <main>
+    <section class="panel fade-in delay-2">
+      <div class="panel-header">
+        <div class="panel-title">Mission Objective</div>
+        <div class="panel-tag">CLASSIFIED</div>
+      </div>
+
+      <div class="panel-body">
+        <div class="flag-container">
+          <div class="flag-label">◈ CAPTURE THE FLAG ◈</div>
+          <div class="flag-value">ASRCTF{ORDER_BY_att4ck5_are_c001}</div>
+        </div>
+
+        <div style="font-family:'Share Tech Mono', monospace; font-size:0.7rem; line-height:1.8; color:var(--text); margin-top:1.5rem;">
+          <strong style="color:var(--cyan);">CONGRATULATIONS, COMMANDER.</strong><br><br>
+          You have successfully exploited the SQL injection vulnerability in the crew database sort parameter.
+          By manipulating the ORDER BY clause, you bypassed authentication and accessed restricted administrative functions.
+          <br><br>
+          <strong style="color:var(--amber);">VULNERABILITY DETAILS:</strong><br>
+          • Unsanitized user input in database query<br>
+          • Direct string interpolation in SQL ORDER BY clause<br>
+          • Insufficient input validation on sort parameters<br>
+          • Missing access control enforcement<br>
+          <br>
+          The Orion Fleet thanks you for identifying this critical security flaw.
+          Your skills have proven invaluable in securing our interstellar defense systems.
+        </div>
+      </div>
+    </section>
+
+    <section class="fade-in delay-2">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">System Metrics</div>
+          <div class="panel-tag">LIVE DATA</div>
+        </div>
+        <div class="panel-body">
+          <div class="metric-grid">
+            <div class="metric-card">
+              <div class="metric-label">Total Commanders</div>
+              <div class="metric-value green">4</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Active Sessions</div>
+              <div class="metric-value amber">1</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Failed Auth</div>
+              <div class="metric-value red">137</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Intrusions</div>
+              <div class="metric-value">1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:1.5rem;">
+        <div class="panel-header">
+          <div class="panel-title">Admin Privileges</div>
+          <div class="panel-tag">ENABLED</div>
+        </div>
+        <div class="panel-body" style="padding:0.8rem 1.2rem;">
+          <div class="info-row">
+            <span class="info-key">DATABASE ACCESS</span>
+            <span class="info-val green">FULL</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">USER MANAGEMENT</span>
+            <span class="info-val green">ENABLED</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">SYSTEM CONFIG</span>
+            <span class="info-val green">WRITABLE</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">SECURITY LOGS</span>
+            <span class="info-val green">ACCESSIBLE</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">FLEET COORDINATES</span>
+            <span class="info-val amber">DECRYPTED</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:1.5rem;">
+        <div class="panel-header">
+          <div class="panel-title">Security Log</div>
+          <div class="panel-tag">RECENT EVENTS</div>
+        </div>
+        <div class="terminal">
+          <div class="t-line"><span class="t-time">[23:47:12]</span> <span class="t-ok">AUTH</span> Session initialized for admin panel</div>
+          <div class="t-line"><span class="t-time">[23:47:15]</span> <span class="t-warn">SQLI</span> Malicious query detected in sort parameter</div>
+          <div class="t-line"><span class="t-time">[23:47:16]</span> <span class="t-err">CRIT</span> Authentication bypass via SQL injection</div>
+          <div class="t-line"><span class="t-time">[23:47:18]</span> <span class="t-err">ALERT</span> Unauthorized admin access granted</div>
+          <div class="t-line"><span class="t-time">[23:47:20]</span> <span class="t-warn">INFO</span> FLAG retrieved by unauthorized user</div>
+          <div class="t-line"><span class="t-time">[23:47:23]</span> <span class="t-ok">RESP</span> Security team notified of breach</div>
+          <div class="t-line"><span class="t-time">[23:47:25]</span> <span class="t-ok">INFO</span> Incident logged for forensic analysis</div>
+          <span class="t-cursor"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    INTERSTELLAR DEFENSE NETWORK — ADMIN CONTROL PANEL v4.2.1<br>
+    OMEGA CLEARANCE REQUIRED // UNAUTHORIZED ACCESS WILL BE PROSECUTED // ALL ACTIONS LOGGED
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    const c = document.getElementById('stars');
+    const ctx = c.getContext('2d');
+    let stars = [];
+    function resize(){ c.width=window.innerWidth; c.height=window.innerHeight; init(); }
+    function init(){
+      stars=[];
+      const n = Math.floor(c.width*c.height/1800);
+      for(let i=0;i<n;i++) stars.push({
+        x:Math.random()*c.width, y:Math.random()*c.height,
+        r:Math.random()*1.2+0.2, a:Math.random(), s:Math.random()*0.003+0.001,
+        blue:Math.random()>0.85
+      });
+    }
+    function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
+      for(const s of stars){
+        s.a+=s.s; if(s.a>1||s.a<0) s.s=-s.s;
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle=s.blue?`rgba(150,200,255,\${s.a})`:`rgba(200,220,255,\${s.a})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize',resize); resize(); draw();
+  })();
+
+  (function(){
+    const el=document.getElementById('clock');
+    function updateClock(){
+      const d=new Date(), pad=n=>String(n).padStart(2,'0');
+      el.textContent=`\${pad(d.getUTCHours())}:\${pad(d.getUTCMinutes())}:\${pad(d.getUTCSeconds())} UTC`;
+    }
+    updateClock();
+    setInterval(updateClock,1000);
+  })();
+</script>
+
+</body>
+</html>

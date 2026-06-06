@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARGATE TERMINAL — SECTOR 7 ACCESS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --void: #020408;
+      --deep: #050d18;
+      --panel: #071525;
+      --border: #0a2540;
+      --dim: #0e3060;
+      --cyan: #00d4ff;
+      --cyan-glow: rgba(0, 212, 255, 0.15);
+      --cyan-dim: rgba(0, 212, 255, 0.4);
+      --amber: #ff9f0a;
+      --amber-glow: rgba(255, 159, 10, 0.15);
+      --red: #ff3b3b;
+      --red-glow: rgba(255, 59, 59, 0.2);
+      --green: #39ff14;
+      --green-dim: rgba(57, 255, 20, 0.3);
+      --text: #a8c8e8;
+      --text-dim: #3a6080;
+      --scanline: rgba(0, 212, 255, 0.03);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    #starfield {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+    #starfield canvas { width: 100%; height: 100%; display: block; }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        var(--scanline) 2px,
+        var(--scanline) 4px
+      );
+      animation: scanmove 8s linear infinite;
+    }
+    @keyframes scanmove {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 100px; }
+    }
+
+    .page {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 0 clamp(1rem, 5vw, 4rem);
+    }
+
+    header {
+      padding: 2rem 0 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .logo-block { display: flex; flex-direction: column; gap: 0.3rem; }
+
+    .org-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.4rem, 4vw, 2.6rem);
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+      text-shadow: 0 0 20px var(--cyan), 0 0 60px var(--cyan-dim);
+      line-height: 1;
+    }
+
+    .logo span { color: var(--amber); text-shadow: 0 0 20px var(--amber); }
+
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-top: 0.2rem;
+    }
+
+    .header-status {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+    }
+
+    .status-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+    }
+
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 8px var(--red);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    .dot.amber { background: var(--amber); box-shadow: 0 0 8px var(--amber); animation-delay: 0.6s; }
+    .dot.cyan  { background: var(--cyan);  box-shadow: 0 0 8px var(--cyan);  animation-delay: 0.2s; animation-duration: 2s; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .alert-banner {
+      margin: 1.5rem 0;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--red);
+      background: var(--red-glow);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .alert-banner::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--red);
+      box-shadow: 0 0 12px var(--red);
+    }
+    .alert-icon {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--red);
+      text-shadow: 0 0 10px var(--red);
+      flex-shrink: 0;
+    }
+    .alert-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      line-height: 1.6;
+      color: #ffaaaa;
+    }
+    .alert-text strong { color: var(--red); }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: rgba(7, 21, 37, 0.85);
+      backdrop-filter: blur(4px);
+      position: relative;
+      overflow: hidden;
+    }
+    .panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan-dim), transparent);
+    }
+
+    .panel-header {
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 212, 255, 0.03);
+    }
+    .panel-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: var(--cyan);
+      text-transform: uppercase;
+    }
+    .panel-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+
+    .panel-body { padding: 1.5rem; }
+
+    .mission-brief {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      margin-bottom: 1.8rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .mission-brief em { color: var(--amber); font-style: normal; }
+
+    .form-group { margin-bottom: 1.2rem; }
+
+    label {
+      display: block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--dim);
+      color: var(--cyan);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85rem;
+      padding: 0.7rem 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.05em;
+      caret-color: var(--cyan);
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 1px var(--cyan-dim), inset 0 0 20px rgba(0, 212, 255, 0.05);
+    }
+    input::placeholder { color: var(--text-dim); opacity: 0.6; }
+
+    .btn-group { display: flex; gap: 0.8rem; margin-top: 1.6rem; }
+
+    .btn {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 1px solid;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
+    }
+
+    .btn-primary {
+      background: rgba(0, 212, 255, 0.1);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      text-shadow: 0 0 8px var(--cyan);
+    }
+    .btn-primary:hover {
+      background: rgba(0, 212, 255, 0.2);
+      box-shadow: 0 0 20px var(--cyan-glow), 0 0 40px var(--cyan-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 159, 10, 0.08);
+      border-color: var(--amber);
+      color: var(--amber);
+      text-shadow: 0 0 8px var(--amber);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 159, 10, 0.18);
+      box-shadow: 0 0 20px var(--amber-glow);
+    }
+
+    .response-box {
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.4);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      line-height: 1.7;
+      color: var(--text-dim);
+      min-height: 60px;
+      transition: all 0.3s;
+      display: none;
+    }
+    .response-box.visible { display: block; }
+    .response-box.error { border-color: var(--red); color: #ff9090; }
+    .response-box.loading { border-color: var(--amber); color: var(--amber); }
+
+    .response-timer {
+      margin-top: 0.5rem;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+    }
+    .response-timer span { color: var(--cyan); }
+
+    .sidebar { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .info-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-key { color: var(--text-dim); letter-spacing: 0.1em; }
+    .info-val { color: var(--cyan); letter-spacing: 0.05em; }
+    .info-val.amber { color: var(--amber); }
+    .info-val.red   { color: var(--red); }
+
+    .terminal {
+      background: #010a10;
+      border: 1px solid var(--border);
+      padding: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1.8;
+      color: #2a6040;
+      max-height: 230px;
+      overflow-y: auto;
+      position: relative;
+    }
+    .terminal::before {
+      content: 'SYS LOG // REAL-TIME';
+      display: block;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.58rem;
+    }
+    .terminal .t-line { margin-bottom: 0.1rem; }
+    .terminal .t-time { color: var(--text-dim); }
+    .terminal .t-ok   { color: var(--green); }
+    .terminal .t-warn { color: var(--amber); }
+    .terminal .t-err  { color: var(--red); }
+    .terminal .t-cursor {
+      display: inline-block;
+      width: 7px; height: 12px;
+      background: var(--green);
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+      margin-left: 3px;
+    }
+
+    .hex-grid {
+      position: absolute; right: -30px; top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.04;
+      pointer-events: none;
+      font-size: 0.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      line-height: 1.4;
+      color: var(--cyan);
+      white-space: pre;
+    }
+
+    .sector-map {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+    .sector-cell {
+      aspect-ratio: 1;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.5rem;
+      color: var(--text-dim);
+      transition: all 0.3s;
+      position: relative;
+    }
+    .sector-cell.active {
+      border-color: var(--cyan);
+      background: var(--cyan-glow);
+      color: var(--cyan);
+      box-shadow: inset 0 0 10px var(--cyan-glow);
+    }
+    .sector-cell.locked {
+      border-color: var(--red);
+      background: var(--red-glow);
+      color: var(--red);
+    }
+    .sector-cell.unknown { background: rgba(0,0,0,0.3); }
+
+    footer {
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-left {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      line-height: 1.8;
+    }
+
+    .footer-right {
+      display: flex; gap: 1.5rem;
+    }
+    .footer-link {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
+
+    .corner-tl, .corner-tr, .corner-bl, .corner-br {
+      position: absolute;
+      width: 12px; height: 12px;
+      pointer-events: none;
+    }
+    .corner-tl { top: 0; left: 0; border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+    .corner-tr { top: 0; right: 0; border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+    .corner-bl { bottom: 0; left: 0; border-bottom: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+    .corner-br { bottom: 0; right: 0; border-bottom: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+
+    .load-bar-wrap {
+      height: 2px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+      margin: 0.8rem 0;
+    }
+    .load-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--amber));
+      width: 0%;
+      transition: width 0.05s linear;
+    }
+
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .glitch::before {
+      color: var(--red);
+      clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+      transform: translate(-2px, 1px);
+      animation: glitch1 4s infinite;
+      opacity: 0;
+    }
+    .glitch::after {
+      color: var(--cyan);
+      clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+      transform: translate(2px, -1px);
+      animation: glitch2 4s infinite;
+      opacity: 0;
+    }
+    @keyframes glitch1 {
+      0%,94%,100% { opacity:0; transform: translate(0,0); }
+      95% { opacity:0.7; transform: translate(-3px, 1px) skewX(-2deg); }
+      97% { opacity:0.4; transform: translate(2px,-1px); }
+    }
+    @keyframes glitch2 {
+      0%,94%,100% { opacity:0; transform: translate(0,0); }
+      96% { opacity:0.5; transform: translate(3px,1px) skewX(3deg); }
+      98% { opacity:0.3; transform: translate(-1px,2px); }
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--void); }
+    ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+    .fade-in { animation: fadein 0.8s ease both; }
+    @keyframes fadein { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.35s; }
+    .delay-4 { animation-delay: 0.5s; }
+
+  </style>
+</head>
+<body>
+
+<div id="starfield"><canvas id="stars"></canvas></div>
+
+<div class="page">
+
+  <header class="fade-in">
+    <div class="logo-block">
+      <div class="org-tag">INTERSTELLAR DEFENSE NETWORK // CLASSIFIED</div>
+      <div class="logo glitch" data-text="STARGATE TERMINAL">
+        STAR<span>GATE</span> TERMINAL
+      </div>
+      <div class="subtitle">SECTOR-7 DEEP SPACE OPERATIONS // AUTHENTICATION REQUIRED</div>
+    </div>
+    <div class="header-status">
+      <div class="status-row"><div class="dot"></div> THREAT LEVEL: CRITICAL</div>
+      <div class="status-row"><div class="dot amber"></div> FIREWALL: COMPROMISED</div>
+      <div class="status-row"><div class="dot cyan"></div> AUTH ENDPOINT: ONLINE</div>
+      <div class="status-row" id="clock" style="color:var(--text-dim); font-family:'Share Tech Mono',monospace; font-size:0.65rem; letter-spacing:0.1em;">--:--:-- UTC</div>
+    </div>
+  </header>
+
+  <div class="alert-banner fade-in delay-1">
+    <div class="alert-icon">⚠</div>
+    <div class="alert-text">
+      <strong>SECURITY BREACH DETECTED</strong> — UNAUTHORIZED ENTITY HAS INFILTRATED PERIMETER NODES 4 THROUGH 11.<br>
+      COMMANDER <em>VOSS-7</em> AUTHENTICATION REQUIRED TO INITIATE EMERGENCY LOCKDOWN PROTOCOL.
+      RESPOND IMMEDIATELY. FLEET COORDINATES MUST NOT FALL INTO HOSTILE HANDS.
+    </div>
+  </div>
+
+  <main>
+
+    <div class="panel fade-in delay-2" style="position:relative;">
+      <div class="corner-tl"></div><div class="corner-tr"></div>
+      <div class="corner-bl"></div><div class="corner-br"></div>
+      <div class="hex-grid">
+        4F52494F4E0A44454550530A5041544802
+        41524941532D350A53454356454E2D410A
+        4C4F434B444F574E0A50524F544F434F4C
+        4E45425552410A434F4D4D414E44455200
+        584F2D3131350A53504543545245203030
+      </div>
+
+      <div class="panel-header">
+        <div class="panel-title">COMMANDER AUTHENTICATION</div>
+        <div class="panel-tag">NODE-07 // AES-BRIDGE</div>
+      </div>
+
+      <div class="panel-body">
+        <div class="mission-brief">
+          MISSION BRIEF — <em>OPERATION DARK NEBULA</em><br>
+          The Orion Fleet database has been isolated behind emergency encryption following the breach.
+          Access is restricted to verified command-level personnel only. Authenticate with your
+          <em>COMMANDER ID</em> and <em>VOID KEY</em> to retrieve the fleet's evacuation coordinates.
+          The enemy closes in. Every second counts.
+        </div>
+
+        <div class="form-group">
+          <label for="uid">▸ COMMANDER IDENTIFIER</label>
+          <input type="text" id="uid" placeholder="Enter commander ID..." autocomplete="off" spellcheck="false"/>
+        </div>
+
+        <div class="form-group">
+          <label for="pwd">▸ VOID KEY</label>
+          <input type="password" id="pwd" placeholder="Enter void key..." autocomplete="off"/>
+        </div>
+
+        <div class="load-bar-wrap">
+          <div class="load-bar-fill" id="loadBar"></div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="doLogin()">AUTHENTICATE</button>
+          <button class="btn btn-secondary" onclick="clearForm()">CLEAR</button>
+        </div>
+
+        <div class="response-box" id="responseBox">
+          <div id="responseText"></div>
+          <div class="response-timer" id="responseTimer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar fade-in delay-3">
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">MISSION DATA</div>
+          <div class="panel-tag">LIVE</div>
+        </div>
+        <div class="panel-body" style="padding:0.8rem 1.2rem;">
+          <div class="info-row">
+            <span class="info-key">OPERATION</span>
+            <span class="info-val">DARK NEBULA</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">CLEARANCE</span>
+            <span class="info-val amber">LEVEL OMEGA</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">SECTOR</span>
+            <span class="info-val">SEVEN // ORION ARM</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">AUTH NODE</span>
+            <span class="info-val">DB-QUERY ENGINE</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">STATUS</span>
+            <span class="info-val red">UNDER SIEGE</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">ATTEMPTS</span>
+            <span class="info-val" id="attemptCount">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">SECTOR MAP</div>
+          <div class="panel-tag">REAL-TIME</div>
+        </div>
+        <div class="sector-map" id="sectorMap"></div>
+      </div>
+
+      <div class="panel" style="overflow:hidden;">
+        <div class="panel-header">
+          <div class="panel-title">SYSTEM LOG</div>
+          <div class="panel-tag" id="logCount">0 EVENTS</div>
+        </div>
+        <div class="terminal" id="terminal">
+          <div class="t-line"><span class="t-time">[00:00:01]</span> <span class="t-ok">BOOT</span> Authentication service started</div>
+          <div class="t-line"><span class="t-time">[00:00:02]</span> <span class="t-ok">INIT</span> Database connection pool ready</div>
+          <div class="t-line"><span class="t-time">[00:00:04]</span> <span class="t-warn">WARN</span> Perimeter breach detected at node 4</div>
+          <div class="t-line"><span class="t-time">[00:00:09]</span> <span class="t-err">CRIT</span> Nodes 4–11 reporting anomalous traffic</div>
+          <div class="t-line"><span class="t-time">[00:00:11]</span> <span class="t-warn">WARN</span> Emergency lockdown awaiting auth</div>
+          <div id="dynLogs"></div>
+          <span class="t-cursor"></span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="fade-in delay-4">
+    <div class="footer-left">
+      INTERSTELLAR DEFENSE NETWORK — STARGATE TERMINAL v4.2.1<br>
+      UNAUTHORIZED ACCESS WILL BE MET WITH EXTREME PREJUDICE // COORDINATES ENCODED
+    </div>
+    <div class="footer-right">
+      <a href="#" class="footer-link">PROTOCOL DOCS</a>
+      <a href="#" class="footer-link">SECTOR MAPS</a>
+      <a href="#" class="footer-link">INCIDENT LOG</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    const c = document.getElementById('stars');
+    const ctx = c.getContext('2d');
+    let stars = [];
+    function resize(){ c.width=window.innerWidth; c.height=window.innerHeight; init(); }
+    function init(){
+      stars=[];
+      const n = Math.floor(c.width*c.height/1800);
+      for(let i=0;i<n;i++) stars.push({
+        x:Math.random()*c.width, y:Math.random()*c.height,
+        r:Math.random()*1.2+0.2, a:Math.random(), s:Math.random()*0.003+0.001,
+        blue:Math.random()>0.85
+      });
+    }
+    function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
+      for(const s of stars){
+        s.a+=s.s; if(s.a>1||s.a<0) s.s=-s.s;
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle=s.blue?`rgba(150,200,255,${s.a})`:`rgba(200,220,255,${s.a})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize',resize); resize(); draw();
+  })();
+
+  (function(){
+    const el=document.getElementById('clock');
+    setInterval(()=>{
+      const d=new Date(), pad=n=>String(n).padStart(2,'0');
+      el.textContent=`${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} UTC`;
+    },1000);
+  })();
+
+  (function(){
+    const map=document.getElementById('sectorMap');
+    const sectors=['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10',
+                   'S11','S12','S13','S14','S15','S16','S17','S18','S19','S20',
+                   'S21','S22','S23','S24','S25'];
+    const states={S7:'active',S4:'locked',S5:'locked',S6:'locked',
+                  S8:'locked',S11:'locked',S12:'locked'};
+    sectors.forEach(s=>{
+      const cell=document.createElement('div');
+      cell.className='sector-cell '+(states[s]||'unknown');
+      cell.textContent=s;
+      map.appendChild(cell);
+    });
+  })();
+
+  let logEvt=0;
+  function addLog(cls,msg){
+    const el=document.getElementById('dynLogs');
+    const d=new Date(),pad=n=>String(n).padStart(2,'0');
+    const ts=`${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
+    const div=document.createElement('div'); div.className='t-line';
+    div.innerHTML=`<span class="t-time">[${ts}]</span> <span class="${cls}">${msg}</span>`;
+    el.appendChild(div);
+    const term=document.getElementById('terminal');
+    term.scrollTop=term.scrollHeight;
+    logEvt++;
+    document.getElementById('logCount').textContent=`${logEvt} EVENTS`;
+  }
+
+  let attempts=0;
+
+  async function doLogin(){
+  const uid = document.getElementById('uid').value.trim();
+  const pwd = document.getElementById('pwd').value;
+
+  if(!uid && !pwd){
+    showResponse('error','INPUT ERROR // Commander ID and Void Key required.',null);
+    return;
+  }
+
+  if(!uid){
+    showResponse('error','INPUT ERROR // Commander ID field is empty.',null);
+    return;
+  }
+
+  if(!pwd){
+    showResponse('error','INPUT ERROR // Void Key field is empty.',null);
+    return;
+  }
+
+  attempts++;
+  document.getElementById('attemptCount').textContent = attempts;
+
+  addLog('t-warn',`AUTH attempt — user: "${uid.substring(0,20)}"`);
+
+  const bar = document.getElementById('loadBar');
+  bar.style.width = '0%';
+
+  const start = performance.now();
+
+  let pct = 0;
+  const tick = setInterval(()=>{
+    pct = Math.min(pct + Math.random()*4, 90);
+    bar.style.width = pct + '%';
+  },40);
+
+  showResponse('loading','QUERYING DATABASE // Please wait…',null);
+
+  try {
+    const res = await fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: uid,
+        password: pwd
+      })
+    });
+
+    const elapsed = performance.now() - start;
+
+    clearInterval(tick);
+    bar.style.width = '100%';
+
+    let data = {};
+    try {
+      data = await res.json();
+    } catch(e) {}
+
+    if(data.success){
+      addLog('t-ok','AUTH SUCCESS — access granted');
+
+      showResponse(
+        'success',
+        'ACCESS GRANTED // Redirecting to command dashboard…',
+        elapsed
+      );
+
+      setTimeout(()=>{
+        window.location.href = '/dashboard';
+      },1000);
+
+    } else {
+      addLog('t-err','AUTH FAILED — access denied');
+
+      showResponse(
+        'error',
+        data.message || 'ACCESS DENIED // Authentication failed.',
+        elapsed
+      );
+    }
+
+    setTimeout(()=>{
+      bar.style.width = '0%';
+    },800);
+
+  } catch(err){
+    clearInterval(tick);
+
+    addLog('t-err','NETWORK ERROR — unable to reach auth server');
+
+    showResponse(
+      'error',
+      'NETWORK ERROR // Unable to contact authentication server.',
+      null
+    );
+
+    setTimeout(()=>{
+      bar.style.width = '0%';
+    },800);
+  }
+}
+
+  function showResponse(type,msg,elapsed){
+    const box=document.getElementById('responseBox');
+    const txt=document.getElementById('responseText');
+    const timer=document.getElementById('responseTimer');
+    box.className='response-box visible '+(type==='error'?'error':type==='loading'?'loading':'');
+    txt.textContent=msg;
+    if(elapsed!==null && elapsed!==undefined){
+      timer.innerHTML=`QUERY RESPONSE TIME: <span>${elapsed.toFixed(1)} ms</span>`;
+      timer.style.display='block';
+    } else {
+      timer.style.display='none';
+    }
+  }
+
+  function clearForm(){
+    document.getElementById('uid').value='';
+    document.getElementById('pwd').value='';
+    const box=document.getElementById('responseBox');
+    box.className='response-box';
+    addLog('t-ok','Form cleared.');
+  }
+
+  /* ── ENTER KEY ── */
+  document.addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+
+  /* ── SECTOR FLICKER ── */
+  setInterval(()=>{
+    const cells=document.querySelectorAll('.sector-cell.unknown');
+    if(!cells.length) return;
+    const c=cells[Math.floor(Math.random()*cells.length)];
+    const orig=c.style.opacity||'1';
+    c.style.opacity='0.3';
+    setTimeout(()=>c.style.opacity=orig, 120+Math.random()*200);
+  },1800);
+
+  /* ── RANDOM SYS EVENTS ── */
+  const sysEvents=[
+    ['t-ok','Heartbeat ping — all subsystems nominal'],
+    ['t-warn','Anomalous query pattern detected on port 5432'],
+    ['t-ok','Encryption key rotation complete'],
+    ['t-warn','High latency on auth relay'],
+    ['t-ok','Packet integrity check passed'],
+    ['t-err','Hostile scan signature detected — origin unknown'],
+    ['t-ok','Backup credentials vault synced'],
+    ['t-warn','Connection pool approaching threshold'],
+  ];
+  let evtIdx=0;
+  setInterval(()=>{
+    const ev=sysEvents[evtIdx%sysEvents.length]; evtIdx++;
+    addLog(ev[0],ev[1]);
+  },7000);
+</script>
+</body>
+</html>

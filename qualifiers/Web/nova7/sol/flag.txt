@@ -1,0 +1,1 @@
+ASRCTF{log4shell_1n_the_b1g_26?}

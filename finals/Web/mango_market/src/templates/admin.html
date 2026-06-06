@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MangoMarket - Admin Dashboard</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --mango-orange: #f97316;
+            --mango-yellow: #fbbf24;
+            --mango-red: #ef4444;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            background-color: #f9fafb;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #fb923c 0%, #f97316 100%);
+            color: white;
+            padding: 1.5rem 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-brand h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin: 0.25rem 0 0;
+        }
+
+        .nav-item {
+            padding: 0.5rem 1.5rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+        }
+
+        .dashboard-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--mango-orange), var(--mango-red));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--mango-orange);
+        }
+
+        .stat-card.yellow {
+            border-left-color: var(--mango-yellow);
+        }
+
+        .stat-card.red {
+            border-left-color: var(--mango-red);
+        }
+
+        .stat-card.green {
+            border-left-color: #10b981;
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card-title {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-card-icon.orange {
+            background-color: rgba(249, 115, 22, 0.1);
+            color: var(--mango-orange);
+        }
+
+        .stat-card-icon.yellow {
+            background-color: rgba(251, 191, 36, 0.1);
+            color: var(--mango-yellow);
+        }
+
+        .stat-card-icon.red {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--mango-red);
+        }
+
+        .stat-card-icon.green {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-card-change.positive {
+            color: #10b981;
+        }
+
+        .stat-card-change.negative {
+            color: #ef4444;
+        }
+
+        .content-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .content-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+        }
+
+        .custom-table {
+            width: 100%;
+            font-size: 0.875rem;
+        }
+
+        .custom-table thead th {
+            background-color: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .custom-table tbody td {
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            color: #374151;
+        }
+
+        .custom-table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .badge-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-completed {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-processing {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-cancelled {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-mango {
+            background: linear-gradient(to right, var(--mango-orange), var(--mango-red));
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-mango:hover {
+            background: linear-gradient(to right, #ea580c, #dc2626);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-placeholder {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-radius: 0.5rem;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 1rem;
+            border: 2px dashed #e5e7eb;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .product-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .product-item:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .product-emoji {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-stock {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <h3>🥭 MangoMarket</h3>
+            <p>Admin Dashboard</p>
+        </div>
+
+        <nav>
+            <div class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="bi bi-house-door"></i>
+                    Dashboard
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-cart3"></i>
+                    Orders
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-box-seam"></i>
+                    Products
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-people"></i>
+                    Customers
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-bar-chart"></i>
+                    Analytics
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-truck"></i>
+                    Shipping
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-database"></i>
+                    Database
+                </a>
+            </div>
+            <div class="nav-item mt-4">
+                <a href="/logout" class="nav-link" method="POST">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Logout
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="dashboard-header d-flex justify-content-between align-items-center">
+            <div>
+                <h1>Dashboard Overview</h1>
+                <p class="text-muted mb-0">Welcome back, Admin! Here's what's happening today.</p>
+            </div>
+            <div class="user-info">
+                <div>
+                    <div class="fw-semibold">Admin User</div>
+                    <div class="text-muted small">admin@mangomarket.com</div>
+                </div>
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card orange">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Total Sales</span>
+                    <div class="stat-card-icon orange">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value">$24,580</div>
+                <div class="stat-card-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    12.5% from last month
+                </div>
+            </div>
+
+            <div class="stat-card yellow">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Total Orders</span>
+                    <div class="stat-card-icon yellow">
+                        <i class="bi bi-bag-check"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value">1,847</div>
+                <div class="stat-card-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    8.2% from last month
+                </div>
+            </div>
+
+            <div class="stat-card green">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Active Customers</span>
+                    <div class="stat-card-icon green">
+                        <i class="bi bi-people"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value">892</div>
+                <div class="stat-card-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    5.7% from last month
+                </div>
+            </div>
+
+            <div class="stat-card red">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Pending Orders</span>
+                    <div class="stat-card-icon red">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value">23</div>
+                <div class="stat-card-change negative">
+                    <i class="bi bi-arrow-down"></i>
+                    3.1% from last month
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="content-card-header">
+                <h5 class="content-card-title">Recent Orders</h5>
+                <button class="btn btn-mango btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i>
+                    View All Orders
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ORD-10847</td>
+                            <td>John Smith</td>
+                            <td>Alphonso Mangoes (5kg)</td>
+                            <td>$45.00</td>
+                            <td><span class="badge-status badge-completed">Completed</span></td>
+                            <td>Feb 10, 2026</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-10846</td>
+                            <td>Emma Wilson</td>
+                            <td>Tommy Atkins (3kg)</td>
+                            <td>$28.50</td>
+                            <td><span class="badge-status badge-processing">Processing</span></td>
+                            <td>Feb 10, 2026</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-10845</td>
+                            <td>Michael Brown</td>
+                            <td>Kent Mangoes (2kg)</td>
+                            <td>$32.00</td>
+                            <td><span class="badge-status badge-pending">Pending</span></td>
+                            <td>Feb 9, 2026</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-10844</td>
+                            <td>Sarah Davis</td>
+                            <td>Kesar Mangoes (4kg)</td>
+                            <td>$52.00</td>
+                            <td><span class="badge-status badge-completed">Completed</span></td>
+                            <td>Feb 9, 2026</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-10843</td>
+                            <td>David Lee</td>
+                            <td>Haden Mangoes (6kg)</td>
+                            <td>$38.00</td>
+                            <td><span class="badge-status badge-cancelled">Cancelled</span></td>
+                            <td>Feb 8, 2026</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-6767</td>
+                            <td>ASRCTF{M4NG05_f0r_4ll!1!}</td>
+                            <td>Alphonso Mangoes (6kg)</td>
+                            <td>$67.67</td>
+                            <td><span class="badge-status badge-cancelled">Cancelled</span></td>
+                            <td>Feb 8, 2026</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="content-card">
+                    <div class="content-card-header">
+                        <h5 class="content-card-title">Sales Overview</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary me-2">Week</button>
+                            <button class="btn btn-sm btn-outline-secondary me-2">Month</button>
+                            <button class="btn btn-sm btn-mango">Year</button>
+                        </div>
+                    </div>
+                    <div class="chart-placeholder">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        Sales Chart Visualization
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="content-card">
+                    <div class="content-card-header">
+                        <h5 class="content-card-title">Top Products</h5>
+                    </div>
+                    <div class="product-grid">
+                        <div class="product-item">
+                            <div class="product-emoji">🥭</div>
+                            <div class="product-name">Alphonso</div>
+                            <div class="product-stock">342 sold</div>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-emoji">🥭</div>
+                            <div class="product-name">Kesar</div>
+                            <div class="product-stock">287 sold</div>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-emoji">🥭</div>
+                            <div class="product-name">Tommy Atkins</div>
+                            <div class="product-stock">231 sold</div>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-emoji">🥭</div>
+                            <div class="product-name">Kent</div>
+                            <div class="product-stock">198 sold</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card mt-4">
+            <div class="content-card-header">
+                <h5 class="content-card-title">
+                    <i class="bi bi-database me-2"></i>
+                    Database Statistics
+                </h5>
+                <button class="btn btn-mango btn-sm">
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    Refresh Stats
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="text-center p-3">
+                        <h3 class="mb-1">2,847</h3>
+                        <p class="text-muted mb-0">Total Records</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center p-3">
+                        <h3 class="mb-1">45.2 MB</h3>
+                        <p class="text-muted mb-0">Database Size</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center p-3">
+                        <h3 class="mb-1">12</h3>
+                        <p class="text-muted mb-0">Collections</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center p-3">
+                        <h3 class="mb-1">MongoDB</h3>
+                        <p class="text-muted mb-0">Database Type</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

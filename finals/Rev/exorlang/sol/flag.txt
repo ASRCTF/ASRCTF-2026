@@ -1,0 +1,1 @@
+ASRCTF{what_the_brainfuck}

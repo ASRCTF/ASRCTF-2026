@@ -1,0 +1,13 @@
+Challenge: tetris_time
+Creator: nmluan
+
+Description:
+Someone left a Tetris clone running on an air-gapped research terminal.
+The binary was pulled from the machine before it was wiped.
+
+Security found dead code that never fires during normal play. Maybe it does fire.
+Maybe you just have to be good enough.
+
+To play: ssh user@<host> -p <port>
+
+Distributed file: tetris_time

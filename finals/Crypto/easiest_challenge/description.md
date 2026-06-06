@@ -1,0 +1,3 @@
+Title: easiest_challenge<br>
+Author: yanganyi<br>
+Description: the easiest challenge was promised to ASRCTF participants DECADES ago...

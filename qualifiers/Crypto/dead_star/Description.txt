@@ -1,0 +1,9 @@
+Challenge: Dead Star
+Creator: nmluan
+
+Description:
+We intercepted a transmission from a decommissioned satellite. The onboard
+cryptosystem encrypted the same payload twice before broadcasting a
+redundancy measure, the engineers said.
+
+Distributed files: output.txt, encrypt.py

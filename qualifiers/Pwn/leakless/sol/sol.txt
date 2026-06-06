@@ -1,0 +1,9 @@
+First of all this challenge title is a scam there are leaks goddamit.
+Anyways challenge contains a simple ret2system call using libc and a very obvious bof vuln.
+There's no aslr but the problem is that we need a libc leak.
+idk if there's another way to leak (lmao) but the intended is we leverage the gets call and perform a ret2gets to control rdi register
+We can then call printf with controlled rdi reg by placing a "%p" which will give us a fmt str leak
+We then ret back to main to call another ret2gets to control rdi again with binsh and system and profit
+If this challenge gets <= 1 solve in the internal ctf I'll make a more detailed writeup on this ret2gets bs (lwk i think this chall won't be very hard)
+See solve.py for solve script
+

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASRCTF Feedback Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .top-bar {
+      background-color: #4A90E2;
+      color: white;
+      padding: 15px 20px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: #444;
+      font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #4A90E2;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #357ABD;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-content h3 {
+      color: #4A90E2;
+      margin-top: 0;
+    }
+
+    .modal-content p {
+      color: #555;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      background-color: #4A90E2;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background-color: #357ABD;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">ASRCTF Feedback Form</div>
+
+  <div class="container">
+    <h2>We Value Your Feedback</h2>
+    <form id="feedbackForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+      <label for="rating">Rating</label>
+      <select id="rating" name="rating" required>
+        <option value="">Select a rating</option>
+        <option value="5">Excellent</option>
+        <option value="4">Good</option>
+        <option value="3">Average</option>
+        <option value="2">Poor</option>
+        <option value="1">Very Poor</option>
+      </select>
+
+      <label for="feedback">Feedback</label>
+      <textarea id="feedback" name="feedback" placeholder="Write your feedback here..." required></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h3>✓ Feedback Submitted!</h3>
+      <p>Thank you for your feedback. A bot will shortly review your submission.</p>
+      <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('feedbackForm');
+    const modal = document.getElementById('modal');
+
+    let redirectUrl = "/";
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("/submit", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+        redirectUrl = data.redirect;
+
+        modal.style.display = 'block';
+        form.reset();
+
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 3000);
+
+      } catch (err) {
+        alert("Submission failed.");
+        console.error(err);
+      }
+    });
+
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

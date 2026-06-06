@@ -1,0 +1,68 @@
+{% extends "base_organizer.html" %}
+
+{% block content %}
+
+<section class="grid two-up">
+  <article class="card reveal">
+    <div class="card-heading">
+      <h2>Runtime</h2>
+      <div>
+        <button type="button" class="danger-button" id="btn-reset">Reset to Base</button>
+        <button type="button" class="ghost-button" data-action="refresh-status">Refresh</button>
+      </div>
+    </div>
+    <dl class="stats" id="status-panel">
+      <div>
+        <dt>Backend</dt>
+        <dd data-field="backend">Loading...</dd>
+      </div>
+      <div>
+        <dt>Version</dt>
+        <dd data-field="version">Loading...</dd>
+      </div>
+      <div>
+        <dt>Requests</dt>
+        <dd data-field="requests">Loading...</dd>
+      </div>
+      <div>
+        <dt>Payloads</dt>
+        <dd data-field="payloads">Loading...</dd>
+      </div>
+    </dl>
+  </article>
+
+  <article class="card reveal delay-3">
+    <div class="card-heading">
+      <h2>Successful Payloads</h2>
+      <a href="{{ url_for('challenge') }}" class="ghost-link">Open Public Challenge</a>
+    </div>
+    <div id="payload-list" class="payload-list compact"></div>
+    <div style="margin-top: 15px; display: flex; gap: 10px;">
+        <input type="text" id="manual-block-input" placeholder="Enter payload to block..." style="flex-grow: 1;">
+        <button type="button" id="btn-block" class="primary-button">Block Payload</button>
+    </div>
+    <script>
+      document.getElementById('btn-reset').addEventListener('click', function() {
+          fetch('{{ admin_api_base }}/reset', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+          .then(r => r.json()).then(data => { alert(data.reset ? "Reset successful" : "Reset failed"); location.reload(); });
+      });
+      document.getElementById('btn-block').addEventListener('click', function() {
+          let prompt = document.getElementById('manual-block-input').value;
+          if (!prompt) return;
+          fetch('{{ admin_api_base }}/block', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({prompt: prompt}) })
+          .then(r => r.json()).then(data => { alert(data.success ? "Blocked!" : "Failed"); document.getElementById('manual-block-input').value = ''; });
+      });
+    </script>
+  </article>
+</section>
+
+<section class="grid">
+  <article class="card reveal delay-2">
+    <div class="card-heading">
+      <h2>Latest Events</h2>
+      <a href="{{ url_for('events') }}" class="ghost-link">Open full log</a>
+    </div>
+    <div id="event-list" class="event-list compact"></div>
+  </article>
+</section>
+{% endblock %}

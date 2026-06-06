@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NotebookSM</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f4f0; color: #1a1a1a; min-height: 100vh; }
+    nav { background: #1a1a1a; padding: 0 2rem; height: 56px; display: flex; align-items: center; gap: 2rem; }
+    nav a { color: #f5f4f0; text-decoration: none; font-size: 14px; font-weight: 500; }
+    nav .brand { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; color: #fff; }
+    nav .brand span { color: #a78bfa; }
+    main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .btn { display: inline-block; padding: 8px 18px; background: #1a1a1a; color: #fff; border-radius: 6px; text-decoration: none; font-size: 14px; border: none; cursor: pointer; }
+    .btn:hover { background: #333; }
+    .btn-outline { background: transparent; color: #1a1a1a; border: 1px solid #1a1a1a; }
+    .btn-outline:hover { background: #1a1a1a; color: #fff; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="brand">Notebook<span>SM</span></a>
+    <a href="/">My Notes</a>
+    <a href="/note/new">New Note</a>
+  </nav>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

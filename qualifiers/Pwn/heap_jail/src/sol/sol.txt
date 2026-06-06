@@ -1,0 +1,6 @@
+Probably the easiest heap challenge ever (this is the closest to slop I'll make)
+We get like almost every heap vuln ever (UAF, double free)
+My solution is prob the easiest method, which is to just tcache poison and get a chunk to paywalled
+Unlock paywalled and get flag
+Probably should've buffed it to not give a free paywalled addr leak but oh well there's a revenge challenge after all
+Solve script in go.py

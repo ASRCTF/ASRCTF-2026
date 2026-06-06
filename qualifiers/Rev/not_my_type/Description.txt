@@ -1,0 +1,12 @@
+Challenge: not_my_type
+Creator: nmluan
+
+Description:
+A bored developer at Elementz Lab pushed a mysterious "licence-check"
+binary to the internal toolchain repository just before wiping their workstation
+and walking out. Weird.
+
+Figure out what string makes it say "Correct!" and submit it
+as the flag.
+
+Distributed file: crackme

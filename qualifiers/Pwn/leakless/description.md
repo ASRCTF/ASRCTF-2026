@@ -1,0 +1,3 @@
+Title: Leakless<br>
+Author: iwanttosleep<br>
+Description: Surely a single gets won't be vuln right...

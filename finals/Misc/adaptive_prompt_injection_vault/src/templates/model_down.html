@@ -1,0 +1,14 @@
+{% extends "base_public.html" %}
+
+{% block content %}
+<section class="card reveal">
+  <div class="card-heading">
+    <h2>Vault Offline</h2>
+    <span class="pill">Retraining in progress</span>
+  </div>
+  <div class="entry">
+    <p>{{ public_state.message }}</p>
+    <p>The vault is retraining after too many successful leaks. Check back once the defense cycle finishes.</p>
+  </div>
+</section>
+{% endblock %}

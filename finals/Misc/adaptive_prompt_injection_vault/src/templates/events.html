@@ -1,0 +1,11 @@
+{% extends "base_organizer.html" %}
+
+{% block content %}
+<section class="card reveal">
+  <div class="card-heading">
+    <h2>Event Stream</h2>
+    <button type="button" class="ghost-button" data-action="refresh-events">Refresh</button>
+  </div>
+  <div id="event-list" class="event-list"></div>
+</section>
+{% endblock %}

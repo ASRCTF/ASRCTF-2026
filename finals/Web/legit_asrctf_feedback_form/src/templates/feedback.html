@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback Summary</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .top-bar {
+      background-color: #4A90E2;
+      color: white;
+      padding: 15px 20px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 550px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .summary-item {
+      margin-bottom: 20px;
+    }
+
+    .summary-label {
+      font-weight: bold;
+      color: #444;
+      margin-bottom: 5px;
+    }
+
+    .summary-value {
+      background-color: #f8fafc;
+      border: 1px solid #dce3ea;
+      border-radius: 5px;
+      padding: 12px;
+      color: #333;
+      word-wrap: break-word;
+    }
+
+    .rating-badge {
+      display: inline-block;
+      background-color: #4A90E2;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #4A90E2;
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+
+    .back-btn:hover {
+      background-color: #357ABD;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">ASRCTF Feedback Summary</div>
+
+  <div class="container">
+    <h2>Submitted Feedback</h2>
+
+    <div class="summary-item">
+      <div class="summary-label">Name</div>
+      <div class="summary-value">
+        {{ name }}
+      </div>
+    </div>
+
+    <div class="summary-item">
+      <div class="summary-label">Email</div>
+      <div class="summary-value">
+        {{ email }}
+      </div>
+    </div>
+
+    <div class="summary-item">
+      <div class="summary-label">Rating</div>
+      <div class="summary-value">
+        <span class="rating-badge">
+          {{ rating }}/5
+        </span>
+      </div>
+    </div>
+
+    <div class="summary-item">
+      <div class="summary-label">Feedback</div>
+      <div class="summary-value">
+        {{ feedback }}
+      </div>
+    </div>
+
+    <a href="/" class="back-btn">Submit Another Response</a>
+  </div>
+
+</body>
+</html>

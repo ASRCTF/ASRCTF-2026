@@ -1,0 +1,16 @@
+<%- include('header') %>
+<h2>Access Terminal</h2>
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="error"><%= error %></div>
+<% } %>
+<form action="/login" method="POST" class="form-container">
+    <label>Operator ID:</label>
+    <input type="text" name="username" required>
+    
+    <label>Passcode:</label>
+    <input type="password" name="password" required>
+    
+    <button type="submit" class="btn">Authenticate</button>
+    <p class="small">Unregistered IDs will be created automatically.</p>
+</form>
+<%- include('footer') %>

@@ -1,0 +1,9 @@
+Challenge: Broken Road
+Creator: nmluan
+
+Description:
+Relay station RELAY-67 went dark after transmitting two authenticated mission
+logs to ground control. Both signatures verified. Something in the station's
+firmware didn't.
+
+Distributed file: output.txt

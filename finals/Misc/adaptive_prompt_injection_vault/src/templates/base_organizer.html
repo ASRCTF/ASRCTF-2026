@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ config.ui.title }} Organizer Console</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+      window.ASRCTF_ADMIN_API_BASE = {{ admin_api_base|default("", true)|tojson }};
+    </script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Organizer Console</p>
+          <h1>{{ config.ui.title }}</h1>
+          <p class="subtitle">Operational controls, leak telemetry, and live retraining state.</p>
+        </div>
+        <nav class="top-nav">
+          <a href="{{ url_for('dashboard') }}" class="{% if page_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+          <a href="{{ url_for('events') }}" class="{% if page_name == 'events' %}active{% endif %}">Events</a>
+          <a href="{{ url_for('challenge') }}">Public Challenge</a>
+          <form method="post" action="{{ url_for('organizer_logout') }}" class="inline-form">
+            <button type="submit" class="ghost-button">Log Out</button>
+          </form>
+        </nav>
+      </header>
+      <main class="content">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

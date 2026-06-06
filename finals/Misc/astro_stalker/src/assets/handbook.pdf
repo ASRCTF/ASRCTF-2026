@@ -1,0 +1,190 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R] /Count 3 >>
+endobj
+
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> /F2 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >> >> >> >>
+endobj
+
+4 0 obj
+<< /Length 1340 >>
+stream
+q 0.039 0.043 0.063 rg 0 0 612 792 re f Q
+q 0.545 0.361 0.965 RG 0.5 w 14 14 584 764 re S Q
+q 0.024 0.400 0.500 RG 0.3 w 17 17 578 758 re S Q
+q 0.024 0.714 0.831 rg 14 754 584 3 re f Q
+q 0.024 0.714 0.831 rg 14 35 584 3 re f Q
+q 0.137 0.020 0.020 rg 176 728 260 22 re f Q
+BT 0.937 0.267 0.267 rg /F2 8 Tf 183 736 Td (SECURITY CLEARANCE LEVEL 5 REQUIRED) Tj ET
+q 0.545 0.361 0.965 RG 0.5 w 30 720 m 582 720 l S Q
+BT 0.024 0.714 0.831 rg /F2 20 Tf 55 685 Td (HYPERION V OPERATIONS HANDBOOK) Tj ET
+q 0.545 0.361 0.965 RG 1.2 w 55 678 m 557 678 l S Q
+BT 0.545 0.361 0.965 rg /F2 12 Tf 55 658 Td (CLASSIFIED TELEMETRY & SYSTEM CODES) Tj ET
+BT 0.886 0.910 0.941 rg /F1 9 Tf 55 620 Td
+(This document contains proprietary technical specifications and) Tj
+0 -13 Td (telemetry protocols for the orbital trajectory systems of the) Tj
+0 -13 Td (Hyperion V mission. Unauthorized distribution, copying, or) Tj
+0 -13 Td (access is strictly prohibited.) Tj
+ET
+q 0.200 0.250 0.350 RG 0.4 w 55 568 m 557 568 l S Q
+BT 0.580 0.639 0.722 rg /F1 8 Tf 55 550 Td
+(DOCUMENT ID: REF-HYP5-B32  //  REV 1.42) Tj
+0 -12 Td (AUTHOR: COMMAND SYSTEMS DIRECTORATE) Tj
+0 -12 Td (CLASSIFICATION: CLASS-III ORBITAL) Tj
+0 -12 Td (DISTRIBUTION: AUTHORISED PERSONNEL ONLY) Tj
+ET
+BT 0.250 0.300 0.400 rg /F1 7 Tf 55 48 Td (PROPERTY OF NEBULA-X AEROSPACE ENGINEERING DIVISION) Tj ET
+endstream
+endobj
+
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> /F2 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >> >> >> >>
+endobj
+
+6 0 obj
+<< /Length 2533 >>
+stream
+q 0.039 0.043 0.063 rg 0 0 612 792 re f Q
+q 0.059 0.078 0.118 rg 0 752 612 40 re f Q
+BT 0.024 0.714 0.831 rg /F2 16 Tf 20 762 Td (SECTION 1: SYSTEM CALIBRATION) Tj ET
+q 0.545 0.361 0.965 RG 1.0 w 0 752 m 612 752 l S Q
+BT 0.580 0.639 0.722 rg /F1 7 Tf 480 762 Td (NEBULA-X AEROSPACE  |  LEVEL 5 CLASSIFIED) Tj ET
+BT 0.024 0.714 0.831 rg /F2 10 Tf 20 720 Td (1.1  OVERVIEW) Tj ET
+q 0.200 0.250 0.350 RG 0.4 w 20 714 m 592 714 l S Q
+BT 0.886 0.910 0.941 rg /F1 9 Tf 20 698 Td
+(The Hyperion V flight systems require persistent synchrony with ground) Tj
+0 -13 Td (control beacons. Calibration sequences are initiated via the main control) Tj
+0 -13 Td (console utilizing dual-phase cryptographic tokens. Engineers must perform) Tj
+0 -13 Td (manual verification of telemetry arrays prior to booster ignition.) Tj
+ET
+BT 0.024 0.714 0.831 rg /F2 10 Tf 20 638 Td (1.2  GROUND STATIONS) Tj ET
+q 0.200 0.250 0.350 RG 0.4 w 20 632 m 592 632 l S Q
+BT 0.886 0.910 0.941 rg /F1 9 Tf 20 616 Td
+(Primary telemetry tracking is maintained by regional orbital receivers.) Tj
+0 -13 Td (Coordinates for key observatory arrays are listed in Section 2. Security) Tj
+0 -13 Td (overrides on individual nodes utilise location-specific seeds derived from) Tj
+0 -13 Td (the installation site. Coordinate payloads are stored in XOR-encoded) Tj
+0 -13 Td (format under the HYPERION-X telemetry cipher protocol.) Tj
+ET
+BT 0.024 0.714 0.831 rg /F2 10 Tf 20 548 Td (1.3  SECURITY AND EMERGENCY BYPASS) Tj ET
+q 0.200 0.250 0.350 RG 0.4 w 20 542 m 592 542 l S Q
+BT 0.886 0.910 0.941 rg /F1 9 Tf 20 526 Td
+(In the event of network isolation, emergency recovery is available through) Tj
+0 -13 Td (the secure CosmoCloud drive dashboard. Login sessions require verification) Tj
+0 -13 Td (of specific system keys and a valid cryptographic session signature.) Tj
+ET
+q 0.100 0.030 0.030 rg 20 450 572 52 re f Q
+q 0.937 0.267 0.267 RG 0.8 w 20 502 m 592 502 l S Q
+q 0.937 0.267 0.267 RG 0.8 w 20 450 m 592 450 l S Q
+BT 0.937 0.267 0.267 rg /F2 9 Tf 28 486 Td (WARNING:) Tj ET
+BT 0.980 0.600 0.600 rg /F1 8.5 Tf 28 472 Td
+(System signatures are checked strictly against the private key registry.) Tj
+0 -12 Td (Keys must NOT be stored in plaintext in local files, developer logs, or Git) Tj
+0 -12 Td (commits. Standard key rotation must be performed every 72 orbital cycles.) Tj
+ET
+q 0.545 0.361 0.965 RG 0.5 w 0 30 m 612 30 l S Q
+BT 0.580 0.639 0.722 rg /F1 7 Tf 20 18 Td (Page 2 of 3) Tj ET
+BT 0.580 0.639 0.722 rg /F1 7 Tf 480 18 Td (DOCUMENT ID: REF-HYP5-B32 // REV 1.42) Tj ET
+endstream
+endobj
+
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 8 0 R /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> /F2 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >> >> >> >>
+endobj
+
+8 0 obj
+<< /Length 2428 >>
+stream
+q 0.039 0.043 0.063 rg 0 0 612 792 re f Q
+q 0.059 0.078 0.118 rg 0 752 612 40 re f Q
+BT 0.024 0.714 0.831 rg /F2 16 Tf 20 762 Td (SECTION 2: TELEMETRY METRICS) Tj ET
+q 0.545 0.361 0.965 RG 1.0 w 0 752 m 612 752 l S Q
+BT 0.580 0.639 0.722 rg /F1 7 Tf 480 762 Td (NEBULA-X AEROSPACE  |  LEVEL 5 CLASSIFIED) Tj ET
+BT 0.024 0.714 0.831 rg /F2 10 Tf 20 722 Td (TABLE 2.1: FLIGHT SYSTEM NODE STATUS) Tj ET
+q 0.200 0.250 0.350 RG 0.4 w 20 716 m 592 716 l S Q
+q 0.080 0.100 0.160 rg 20 690 572 18 re f Q
+q 0.545 0.361 0.965 RG 0.6 w 20 708 m 592 708 l S Q
+q 0.545 0.361 0.965 RG 0.6 w 20 690 m 592 690 l S Q
+BT 0.545 0.361 0.965 rg /F2 8 Tf 24 697 Td (NODE ID) Tj ET
+BT 0.545 0.361 0.965 rg /F2 8 Tf 174 697 Td (COORDINATES) Tj ET
+BT 0.545 0.361 0.965 rg /F2 8 Tf 334 697 Td (FREQUENCY) Tj ET
+BT 0.545 0.361 0.965 rg /F2 8 Tf 454 697 Td (STATUS) Tj ET
+q 0.120 0.160 0.230 RG 0.4 w 20 680 m 592 680 l S Q
+BT 0.886 0.910 0.941 rg /F1 8 Tf 24 671 Td (HYP-NODE-01 \(Primary\)) Tj ET
+BT 0.886 0.910 0.941 rg /F1 8 Tf 174 671 Td (38.4331 N, 79.8398 W) Tj ET
+BT 0.886 0.910 0.941 rg /F1 8 Tf 334 671 Td (1.420 GHz) Tj ET
+BT 0.204 0.780 0.349 rg /F1 8 Tf 454 671 Td (OPERATIONAL) Tj ET
+q 0.120 0.160 0.230 RG 0.4 w 20 660 m 592 660 l S Q
+BT 0.886 0.910 0.941 rg /F1 8 Tf 24 651 Td (HYP-NODE-02 \(Backup\)) Tj ET
+BT 0.886 0.910 0.941 rg /F1 8 Tf 174 651 Td (46.5475 N, 7.9851 E) Tj ET
+BT 0.886 0.910 0.941 rg /F1 8 Tf 334 651 Td (2.300 GHz) Tj ET
+BT 0.961 0.620 0.043 rg /F1 8 Tf 454 651 Td (STANDBY) Tj ET
+q 0.545 0.361 0.965 RG 0.6 w 20 640 m 592 640 l S Q
+BT 0.024 0.714 0.831 rg /F2 10 Tf 20 616 Td (TECHNICAL NOTES:) Tj ET
+q 0.200 0.250 0.350 RG 0.4 w 20 610 m 592 610 l S Q
+BT 0.886 0.910 0.941 rg /F1 9 Tf 20 594 Td
+(Primary telemetry is directed through the Green Bank Telescope array) Tj
+0 -13 Td (\(Node-01\). Backup signals are rerouted through the Sphinx Observatory) Tj
+0 -13 Td (\(Node-02\) in Switzerland. Engineers must ensure the respective decoders) Tj
+0 -13 Td (are properly tuned to the operational frequency.) Tj
+ET
+BT 0.580 0.639 0.722 rg /F1 9 Tf 20 534 Td
+(Signal key sequences are updated periodically. Node coordinate payloads) Tj
+0 -13 Td (are HYPERION-X cipher encoded. Contact Commander Leo Sterling for keys.) Tj
+ET
+q 0.545 0.361 0.965 RG 0.5 w 0 30 m 612 30 l S Q
+BT 0.580 0.639 0.722 rg /F1 7 Tf 20 18 Td (Page 3 of 3) Tj ET
+BT 0.580 0.639 0.722 rg /F1 7 Tf 480 18 Td (DOCUMENT ID: REF-HYP5-B32 // REV 1.42) Tj ET
+endstream
+endobj
+
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 10 0 R /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> /F2 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >> >> >> >>
+endobj
+
+10 0 obj
+<< /Length 1111 >>
+stream
+q 0.039 0.043 0.063 rg 0 0 612 792 re f Q
+q 0.200 0.020 0.020 rg 0 752 612 40 re f Q
+q 0.937 0.267 0.267 RG 1.5 w 0 752 m 612 752 l S Q
+BT 0.937 0.267 0.267 rg /F2 13 Tf 20 762 Td (NEBULA-X CLASSIFIED APPENDIX  --  NOT FOR DISTRIBUTION) Tj ET
+q 0.937 0.267 0.267 RG 0.6 w 20 730 m 592 730 l S Q
+BT 0.937 0.267 0.267 rg /F2 10 Tf 20 714 Td (UNAUTHORISED ACCESS IS A VIOLATION OF NEBULA-X SECURITY PROTOCOL) Tj ET
+q 0.937 0.267 0.267 RG 0.6 w 20 708 m 592 708 l S Q
+q 0.059 0.078 0.118 rg 20 620 572 78 re f Q
+q 0.024 0.714 0.831 RG 0.8 w 20 698 m 592 698 l S Q
+q 0.024 0.714 0.831 RG 0.8 w 20 620 m 592 620 l S Q
+BT 0.024 0.714 0.831 rg /F2 10 Tf 28 682 Td (MISSION AUTHENTICATION CODES:) Tj ET
+BT 0.024 0.714 0.831 rg /F2 11 Tf 28 660 Td (KEY2: HYPERION_ALPHA_7) Tj ET
+BT 0.580 0.639 0.722 rg /F1 8.5 Tf 28 640 Td
+(Hint: Identify the spacecraft model in Commander Leo Sterling's social avatar.) Tj
+0 -12 Td (Locate its official COSPAR international designation ID.) Tj
+ET
+BT 0.580 0.639 0.722 rg /F1 8 Tf 20 590 Td (This page is not indexed in the document page catalog. Access via forensic PDF analysis.) Tj ET
+endstream
+endobj
+
+xref
+0 11
+0000000000 65535 f 
+0000000009 00000 n 
+0000000059 00000 n 
+0000000129 00000 n 
+0000000369 00000 n 
+0000001762 00000 n 
+0000002002 00000 n 
+0000004588 00000 n 
+0000004828 00000 n 
+0000007309 00000 n 
+0000007550 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+8715
+%%EOF

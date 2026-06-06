@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STARGATE TERMINAL — CREW DATABASE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --void: #020408;
+      --deep: #050d18;
+      --panel: #071525;
+      --border: #0a2540;
+      --dim: #0e3060;
+      --cyan: #00d4ff;
+      --cyan-glow: rgba(0, 212, 255, 0.15);
+      --cyan-dim: rgba(0, 212, 255, 0.4);
+      --amber: #ff9f0a;
+      --amber-glow: rgba(255, 159, 10, 0.15);
+      --red: #ff3b3b;
+      --red-glow: rgba(255, 59, 59, 0.2);
+      --green: #39ff14;
+      --green-dim: rgba(57, 255, 20, 0.3);
+      --text: #a8c8e8;
+      --text-dim: #3a6080;
+      --scanline: rgba(0, 212, 255, 0.03);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    #starfield {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+    #starfield canvas { width: 100%; height: 100%; display: block; }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        var(--scanline) 2px,
+        var(--scanline) 4px
+      );
+      animation: scanmove 8s linear infinite;
+    }
+    @keyframes scanmove {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 100px; }
+    }
+
+    .page {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      padding: 0 clamp(1rem, 5vw, 4rem);
+    }
+
+    header {
+      padding: 2rem 0 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .logo-block { display: flex; flex-direction: column; gap: 0.3rem; }
+
+    .org-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.4rem, 4vw, 2.6rem);
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+      text-shadow: 0 0 20px var(--cyan), 0 0 60px var(--cyan-dim);
+      line-height: 1;
+    }
+
+    .logo span { color: var(--amber); text-shadow: 0 0 20px var(--amber); }
+
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-top: 0.2rem;
+    }
+
+    .header-status {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+    }
+
+    .status-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+    }
+
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    .dot.amber { background: var(--amber); box-shadow: 0 0 8px var(--amber); animation-delay: 0.6s; }
+    .dot.cyan  { background: var(--cyan);  box-shadow: 0 0 8px var(--cyan);  animation-delay: 0.2s; animation-duration: 2s; }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .top-banner {
+      margin: 1.5rem 0;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--cyan);
+      background: var(--cyan-glow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .top-banner::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan);
+    }
+
+    .banner-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .banner-text strong { color: var(--cyan); }
+
+    .banner-actions {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.75rem 1rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: 1px solid;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
+    }
+
+    .btn-primary {
+      background: rgba(0, 212, 255, 0.1);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      text-shadow: 0 0 8px var(--cyan);
+    }
+    .btn-primary:hover {
+      background: rgba(0, 212, 255, 0.2);
+      box-shadow: 0 0 20px var(--cyan-glow), 0 0 40px var(--cyan-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 159, 10, 0.08);
+      border-color: var(--amber);
+      color: var(--amber);
+      text-shadow: 0 0 8px var(--amber);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 159, 10, 0.18);
+      box-shadow: 0 0 20px var(--amber-glow);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 1.5rem;
+      padding: 0 0 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: rgba(7, 21, 37, 0.85);
+      backdrop-filter: blur(4px);
+      position: relative;
+      overflow: hidden;
+    }
+    .panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan-dim), transparent);
+    }
+
+    .panel-header {
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: rgba(0, 212, 255, 0.03);
+    }
+
+    .panel-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: var(--cyan);
+      text-transform: uppercase;
+    }
+
+    .panel-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+
+    .panel-body { padding: 1.2rem; }
+
+    .toolbar {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 160px;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 820px) {
+        .toolbar { grid-template-columns: 1fr; }
+    }
+
+    label {
+      display: block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--dim);
+      color: var(--cyan);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.82rem;
+      padding: 0.7rem 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.05em;
+    }
+
+    input[type="text"]:focus, select:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 1px var(--cyan-dim), inset 0 0 20px rgba(0, 212, 255, 0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      overflow: hidden;
+    }
+
+    thead th {
+      text-align: left;
+      color: var(--cyan);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      padding: 0.9rem 0.8rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 212, 255, 0.04);
+      text-transform: uppercase;
+      font-size: 0.62rem;
+    }
+
+    tbody td {
+      padding: 0.9rem 0.8rem;
+      border-bottom: 1px solid rgba(10, 37, 64, 0.8);
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    tbody tr {
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    tbody tr:hover {
+      background: rgba(0, 212, 255, 0.04);
+      box-shadow: inset 0 0 0 1px rgba(0,212,255,0.08);
+    }
+
+    .muted { color: var(--text-dim); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.55rem;
+      border: 1px solid var(--dim);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(0,0,0,0.35);
+    }
+
+    .badge.active {
+      border-color: rgba(57,255,20,0.5);
+      color: var(--green);
+      box-shadow: inset 0 0 10px rgba(57,255,20,0.08);
+    }
+
+    .badge.standby {
+      border-color: rgba(255,159,10,0.5);
+      color: var(--amber);
+      box-shadow: inset 0 0 10px rgba(255,159,10,0.08);
+    }
+
+    .badge.locked,
+    .badge.inactive {
+      border-color: rgba(255,59,59,0.5);
+      color: var(--red);
+      box-shadow: inset 0 0 10px rgba(255,59,59,0.08);
+    }
+
+    .empty-state {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-family: 'Share Tech Mono', monospace;
+      border: 1px dashed var(--border);
+      background: rgba(0,0,0,0.2);
+    }
+
+    .sidebar { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .info-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      gap: 1rem;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-key { color: var(--text-dim); letter-spacing: 0.1em; }
+    .info-val { color: var(--cyan); letter-spacing: 0.05em; text-align: right; }
+    .info-val.amber { color: var(--amber); }
+    .info-val.red   { color: var(--red); }
+    .info-val.green { color: var(--green); }
+
+    .terminal {
+      background: #010a10;
+      border: 1px solid var(--border);
+      padding: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1.8;
+      color: #2a6040;
+      max-height: 260px;
+      overflow-y: auto;
+      position: relative;
+    }
+    .terminal::before {
+      content: 'SYS LOG // CREW DATABASE';
+      display: block;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.58rem;
+    }
+    .terminal .t-line { margin-bottom: 0.1rem; }
+    .terminal .t-time { color: var(--text-dim); }
+    .terminal .t-ok   { color: var(--green); }
+    .terminal .t-warn { color: var(--amber); }
+    .terminal .t-err  { color: var(--red); }
+
+    footer {
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-left {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      line-height: 1.8;
+    }
+
+    .footer-right {
+      display: flex; gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
+
+    .fade-in { animation: fadein 0.8s ease both; }
+    @keyframes fadein { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.35s; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--void); }
+    ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<div id="starfield"><canvas id="stars"></canvas></div>
+
+<div class="page">
+
+  <header class="fade-in">
+    <div class="logo-block">
+      <div class="org-tag">INTERSTELLAR DEFENSE NETWORK // CLASSIFIED</div>
+      <div class="logo">STAR<span>GATE</span> TERMINAL</div>
+      <div class="subtitle">CREW DATABASE // SECTOR-7 COMMAND DASHBOARD</div>
+    </div>
+    <div class="header-status">
+      <div class="status-row"><div class="dot"></div> DATABASE LINK: STABLE</div>
+      <div class="status-row"><div class="dot amber"></div> CLEARANCE: OMEGA</div>
+      <div class="status-row"><div class="dot cyan"></div> SESSION: AUTHENTICATED</div>
+      <div class="status-row" id="clock" style="color:var(--text-dim); font-family:'Share Tech Mono',monospace; font-size:0.65rem; letter-spacing:0.1em;">--:--:-- UTC</div>
+    </div>
+  </header>
+
+  <div class="top-banner fade-in delay-1">
+    <div class="banner-text">
+      <strong>CREW DATABASE ONLINE</strong> — Authorized personnel records from Sector-7 are available for review.
+      Monitor command roster, verify unit assignments, and inspect active deployment states.
+    </div>
+    <div class="banner-actions">
+      <a href="/crew" class="btn btn-primary">Refresh</a>
+      <a href="/logout" class="btn btn-secondary">Terminate Session</a>
+    </div>
+  </div>
+
+  <main>
+    <section class="panel fade-in delay-2">
+      <div class="panel-header">
+        <div class="panel-title">Crew Manifest</div>
+        <div class="panel-tag">TOTAL RECORDS // {{ users|length }}</div>
+      </div>
+
+      <div class="panel-body">
+        <div class="toolbar">
+            <div>
+                <label for="searchInput">▸ Search Crew</label>
+                <input type="text" id="searchInput" placeholder="Search by username, role, sector..." />
+            </div>
+            <div>
+                <label for="statusFilter">▸ Filter Status</label>
+                <select id="statusFilter">
+                <option value="">ALL STATUSES</option>
+                <option value="active">ACTIVE</option>
+                <option value="standby">STANDBY</option>
+                <option value="inactive">INACTIVE</option>
+                <option value="locked">LOCKED</option>
+                </select>
+            </div>
+            <div>
+                <label for="sectorFilter">▸ Sector</label>
+                <input type="text" id="sectorFilter" placeholder="e.g. S7" />
+            </div>
+            <div>
+                <label for="sortBy">▸ Sort By</label>
+                <select id="sortBy">
+                <option value="id">ID</option>
+                <option value="username">USERNAME</option>
+                <option value="role">ROLE</option>
+                <option value="sector">SECTOR</option>
+                <option value="status">STATUS</option>
+                </select>
+            </div>
+            <div style="display:flex; align-items:end;">
+                <button type="button" class="btn btn-primary" style="width:100%;" id="applySortBtn">
+                APPLY SORT
+                </button>
+            </div>
+        </div>
+
+        {% if users and users|length > 0 %}
+        <div style="overflow-x:auto;">
+          <table id="crewTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Sector</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td class="muted">{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.sector }}</td>
+                <td>
+                  <span class="badge {{ (user.status or 'inactive')|lower }}">
+                    {{ user.status }}
+                  </span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+          NO CREW RECORDS AVAILABLE // Database returned zero entries.
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <aside class="sidebar fade-in delay-3">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Database Stats</div>
+          <div class="panel-tag">LIVE</div>
+        </div>
+        <div class="panel-body" style="padding:0.8rem 1.2rem;">
+          <div class="info-row">
+            <span class="info-key">TOTAL CREW</span>
+            <span class="info-val">{{ users|length }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">ACTIVE</span>
+            <span class="info-val green">
+              {{ users | selectattr('status', 'equalto', 'Active') | list | length }}
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">STANDBY</span>
+            <span class="info-val amber">
+              {{ users | selectattr('status', 'equalto', 'Standby') | list | length }}
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">INACTIVE</span>
+            <span class="info-val red">
+              {{ users | selectattr('status', 'equalto', 'Inactive') | list | length }}
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">LOCKED</span>
+            <span class="info-val red">
+              {{ users | selectattr('status', 'equalto', 'Locked') | list | length }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">System Feed</div>
+          <div class="panel-tag">REAL-TIME</div>
+        </div>
+        <div class="terminal">
+          <div class="t-line"><span class="t-time">[00:00:01]</span> <span class="t-ok">INIT</span> Crew dashboard loaded</div>
+          <div class="t-line"><span class="t-time">[00:00:02]</span> <span class="t-ok">SYNC</span> Manifest records synchronized</div>
+          <div class="t-line"><span class="t-time">[00:00:04]</span> <span class="t-warn">WARN</span> External sectors remain unstable</div>
+          <div class="t-line"><span class="t-time">[00:00:07]</span> <span class="t-ok">INFO</span> Authorized operator session verified</div>
+          <div class="t-line"><span class="t-time">[00:00:09]</span> <span class="t-ok">INFO</span> {{ users|length }} crew records indexed</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Command Notes</div>
+          <div class="panel-tag">OMEGA</div>
+        </div>
+        <div class="panel-body">
+          <div style="font-family:'Share Tech Mono', monospace; font-size:0.7rem; line-height:1.8; color:var(--text-dim);">
+            Use the manifest to inspect crew assignments across operational sectors.
+            Search and filter controls update locally in the client interface for rapid review.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="footer-left">
+      INTERSTELLAR DEFENSE NETWORK — CREW DATABASE VIEW v4.2.1<br>
+      AUTHORIZED COMMAND PERSONNEL ONLY // ALL ACCESS EVENTS MAY BE LOGGED
+    </div>
+    <div class="footer-right">
+      <a href="#" class="footer-link">Manifest Export</a>
+      <a href="#" class="footer-link">Command Logs</a>
+      <a href="#" class="footer-link">Fleet Registry</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    const c = document.getElementById('stars');
+    const ctx = c.getContext('2d');
+    let stars = [];
+    function resize(){ c.width=window.innerWidth; c.height=window.innerHeight; init(); }
+    function init(){
+      stars=[];
+      const n = Math.floor(c.width*c.height/1800);
+      for(let i=0;i<n;i++) stars.push({
+        x:Math.random()*c.width, y:Math.random()*c.height,
+        r:Math.random()*1.2+0.2, a:Math.random(), s:Math.random()*0.003+0.001,
+        blue:Math.random()>0.85
+      });
+    }
+    function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
+      for(const s of stars){
+        s.a+=s.s; if(s.a>1||s.a<0) s.s=-s.s;
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle=s.blue?`rgba(150,200,255,${s.a})`:`rgba(200,220,255,${s.a})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize',resize); resize(); draw();
+  })();
+
+  (function(){
+    const el=document.getElementById('clock');
+    function updateClock(){
+      const d=new Date(), pad=n=>String(n).padStart(2,'0');
+      el.textContent=`${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} UTC`;
+    }
+    updateClock();
+    setInterval(updateClock,1000);
+  })();
+
+  (function(){
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const sectorFilter = document.getElementById('sectorFilter');
+    const table = document.getElementById('crewTable');
+
+    if (!table) return;
+
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+    function filterRows() {
+      const q = searchInput.value.trim().toLowerCase();
+      const status = statusFilter.value.trim().toLowerCase();
+      const sector = sectorFilter.value.trim().toLowerCase();
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const id = cells?.textContent.toLowerCase() || '';
+        const username = cells?.textContent.toLowerCase() || '';
+        const role = cells?.textContent.toLowerCase() || '';
+        const rowSector = cells?.textContent.toLowerCase() || '';
+        const rowStatus = cells?.textContent.toLowerCase() || '';
+
+        const textMatch = !q || [id, username, role, rowSector, rowStatus].some(v => v.includes(q));
+        const statusMatch = !status || rowStatus.includes(status);
+        const sectorMatch = !sector || rowSector.includes(sector);
+
+        row.style.display = (textMatch && statusMatch && sectorMatch) ? '' : 'none';
+      });
+    }
+
+    searchInput.addEventListener('input', filterRows);
+    statusFilter.addEventListener('change', filterRows);
+    sectorFilter.addEventListener('input', filterRows);
+  })();
+</script>
+<script>
+  (function(){
+    const sortSelect = document.getElementById('sortBy');
+    const applySortBtn = document.getElementById('applySortBtn');
+
+    if (!sortSelect || !applySortBtn) return;
+
+    applySortBtn.addEventListener('click', () => {
+      const sortBy = sortSelect.value || 'id';
+      window.location.href = `/crew/${sortBy}`;
+    });
+  })();
+</script>
+
+</body>
+</html>

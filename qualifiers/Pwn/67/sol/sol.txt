@@ -1,0 +1,3 @@
+Normal ret2syscall challenge
+just place rop chain on start of buffer and pivot back to start of buffer using leaked addr and profit
+See solve.py for solve script

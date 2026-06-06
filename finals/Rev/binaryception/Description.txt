@@ -1,0 +1,11 @@
+Challenge: Binaryception
+Creator: nmluan
+
+Description:
+A routine firmware validator was recovered from a decommissioned embedded
+controller. The analyst who first looked at it said "this one's easy, it's
+just a loop with a switch statement." He handed it off and never came back.
+
+Prove the flag-check logic is anything but simple.
+
+Distributed file: binaryception

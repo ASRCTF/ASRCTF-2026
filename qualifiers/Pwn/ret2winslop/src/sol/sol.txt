@@ -1,0 +1,4 @@
+Normal ret2win challenge with additional requirement of setting son global var to 0xAAAAAAAA
+We just gain control of rbp and modify the value of son to our desired value by utilising a stack pivot
+We then ret2win and profit
+See solve.py for solve script

@@ -1,0 +1,9 @@
+Challenge: Talking Firmware
+Creator: nmluan
+
+Description:
+RELAY-7's last firmware image was recovered after the station went dark.
+The binary won't run. The debug symbols are mostly garbage. But something
+in the structure was left behind on purpose.
+
+Distributed file: firmware.elf

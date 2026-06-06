@@ -1,0 +1,6 @@
+Stupidest challenge I wrote so far from an inspiration I got sitting on a toilet bowl
+Challenge uses FF3 cipher (which is guessable due to presence of key, tweak and ascii key, tweak and ct)
+This challenge was not meant to be a crypto its in misc becuase there's forens (stego) too but we all know misc is anything that is not in the cats or 2 or more of the cats lol
+Anyways ct is zero width stego (can extact using https://330k.github.io/misc_tools/unicode_steganography.html)
+key is capital letters of the text and the tweak are the bolded letters.
+Convert both tweak and key to hex to decode (see solve script)

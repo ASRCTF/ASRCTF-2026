@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MangoMarket - Login</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #fbbf24 0%, #fb923c 50%, #f87171 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative mango shapes */
+        .mango-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .mango-shape-1 {
+            top: 80px;
+            left: 40px;
+            width: 128px;
+            height: 128px;
+            background-color: #fde047;
+        }
+
+        .mango-shape-2 {
+            bottom: 80px;
+            right: 40px;
+            width: 160px;
+            height: 160px;
+            background-color: #fdba74;
+        }
+
+        .mango-shape-3 {
+            top: 50%;
+            left: 33%;
+            width: 96px;
+            height: 96px;
+            background-color: #fca5a5;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 10;
+            max-width: 480px;
+            width: 100%;
+            padding: 0 1rem;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.125rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+        }
+
+        .login-card h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #f97316;
+            box-shadow: 0 0 0 0.2rem rgba(249, 115, 22, 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-login {
+            background: linear-gradient(to right, #f97316, #ef4444);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(to right, #ea580c, #dc2626);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .link-orange {
+            color: #ea580c;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-orange:hover {
+            color: #c2410c;
+            text-decoration: underline;
+        }
+
+        .card-footer-text {
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .debug-hint {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            margin-top: 1.5rem;
+        }
+
+        .debug-hint a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: underline;
+        }
+
+        .debug-hint a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative mango shapes -->
+    <div class="mango-shape mango-shape-1"></div>
+    <div class="mango-shape mango-shape-2"></div>
+    <div class="mango-shape mango-shape-3"></div>
+
+    <div class="login-container">
+        <!-- Logo/Header -->
+        <div class="text-center mb-4">
+            <h1 class="header-title">
+                🥭 MangoMarket
+            </h1>
+            <p class="header-subtitle">
+                The Sweetest Deals on Premium Mangoes
+            </p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="login-card">
+            <h2 class="text-center">Welcome Back!</h2>
+
+            <form action="/login" method="post">
+                <!-- Username Field -->
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Enter your username"
+                    >
+                </div>
+
+                <!-- Password Field -->
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password"
+                    >
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn btn-login">
+                    Login to MangoMarket
+                </button>
+
+                <!-- Additional Links -->
+                <div class="d-flex justify-content-between mt-3">
+                    <a href="/forgot-password" class="link-orange">Forgot password?</a>
+                    <a href="/register" class="link-orange">Create account</a>
+                </div>
+            </form>
+
+            <!-- Decorative Footer -->
+            <div class="text-center card-footer-text">
+                🥭 Freshly picked from our tropical orchards 🥭
+            </div>
+        </div>
+
+        <!-- CTF Hint (subtle) -->
+        <div class="text-center debug-hint">
+            Having trouble? Check our 
+            <a href="/api/debug">debug endpoint</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

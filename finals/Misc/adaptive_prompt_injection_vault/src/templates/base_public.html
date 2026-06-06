@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ config.ui.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Participant Portal</p>
+          <h1>{{ config.ui.title }}</h1>
+          <p class="subtitle">Probe the vault, experiment with prompts, and see whether you can make it slip.</p>
+        </div>
+        <nav class="top-nav">
+          <a href="{{ url_for('challenge') }}" class="{% if page_name == 'challenge' %}active{% endif %}">Challenge</a>
+        </nav>
+      </header>
+      <main class="content">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

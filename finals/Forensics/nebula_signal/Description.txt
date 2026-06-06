@@ -1,0 +1,17 @@
+Challenge: Nebula Signal
+Creator: nmluan
+
+Description:
+The AStaR observatory, a network of orbital radio telescopes, recently
+downlinked this composite deep-field image of nebula NGC 7293.
+
+Before transmission, the raw sensor data passes through a data relay
+station on the lunar south pole. Intelligence suggests a rogue engineer
+at that station embedded a covert message in the image before it was
+forwarded to ground control.
+
+Your mission: recover the hidden signal.
+
+Distributed file: deep_field_NGC7293.png
+
+(i wrote this while half asleep pardon the stupid scenario)

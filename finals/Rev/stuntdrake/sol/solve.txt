@@ -1,0 +1,28 @@
+Stuntdrake
+
+Background: This challenge is taken inspiration from an end game comp from Hearthstone Battlegrounds, and is usually done after a stuntdrake pivot (also highly meta).
+The basics of this comp is that Stuntdrake gives friendly minions its attack, but this effect will only proc after 3 friendly minions die. To get friendly minions to die, twilight hatchling is used, as its deathrattle summons a whelp which attacks immediately. Since it has low hp, it dies instantly. The stuntdrake then procs, so if you have a stuntdrake with a crazy amount of attack, each subsequent attack deals a bunch of attack, and the entire enemy board dies.
+Variations of this comp exists, another notable one being replacing stuntdrake with carapace riser, and playing attack scaling spells on it using buffs like friendly geists. This comp won the final game of the world champs but carapace riser got removed from the tavern pool and the comp is non existent now. (side note carapace is back in the game rn so uhhhhh ye)
+A stuntdrake comp consists of (usually), (note that this stuntdrake comp is prob the most vanilla one) 
+2 broodmothers, 1(or more) titus, 1 stuntdrake (obv), twilight hatchling (to start the stuntdrake) [and potentially some scam units]
+
+Modifications:
+for the sake of this challenge and it producing enough whelps for equations. If we have a golden titus, we trigger the whelp deathrattle 2 extra times, and if we have 2 golden titus, we trigger the whelp proc 5 times for each dead twilight hatchling, hence, we will put 2 golden titus, 2 golden twilight hatchlings and 2 broodmother and 1 stuntdrake
+
+ok enough fangirling. ts is what the program is gonna do
+Handout will give them an unpacker binary, which then triggers the start of the comp
+
+For this chall:
+the unpacker writes stuntdrake, the main binary to spawn the other minons. The other binaries have nothing to do with getting the flag, but they must be present during the entire duration of the stuntdrake binary's life if not stuntdrake fails and you don't get enough equations.
+
+Note: you don't have to retrieve every eqn since there are 55 eqns for like 30+ var only and with ur h2 math knowledge you should know that as long as your eqn >= var you can solve with z3 for the flag
+
+Also for how you gotta know the whelp has equations, uhhhh, lwk should just strings everything man its re, especially when a prog randomly spawns and die lmao
+
+That said this challenge is cheesable by reversing the nuitka binary though I believe it will be difficult (please send me writeup if you do thanks)
+
+For the retrieval of the equations, refer to sol.sh
+For the z3 and piecing of the flag, refer to solve.py
+
+
+

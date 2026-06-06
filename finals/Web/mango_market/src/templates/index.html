@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MangoMarket - Premium Fresh Mangoes</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --mango-orange: #f97316;
+            --mango-yellow: #fbbf24;
+            --mango-red: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, var(--mango-orange), var(--mango-red));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+        }
+
+        .admin-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .admin-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fecaca 100%);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #78350f;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #92400e;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .product-section {
+            padding: 4rem 0;
+            background-color: #f9fafb;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+        }
+
+        .product-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-badge {
+            display: inline-block;
+            background: linear-gradient(to right, var(--mango-orange), var(--mango-red));
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .product-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .product-price {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--mango-orange);
+        }
+
+        .product-stock {
+            font-size: 0.875rem;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .btn-add-cart {
+            background: linear-gradient(to right, var(--mango-orange), var(--mango-red));
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn-add-cart:hover {
+            background: linear-gradient(to right, #ea580c, #dc2626);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .features {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(239, 68, 68, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--mango-orange);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-text {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--mango-red);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                🥭 MangoMarket
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item ms-2 me-2">
+                        <a class="nav-link cart-icon" href="#cart">
+                            <i class="bi bi-cart3 fs-5"></i>
+                            <span class="cart-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="admin-btn" href="/admin">
+                            <i class="bi bi-shield-lock me-1"></i>
+                            Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>🥭 Fresh, Premium Mangoes 🥭</h1>
+            <p>Handpicked from the finest orchards. Experience the sweetest, juiciest mangoes delivered fresh to your door!</p>
+            <a href="#products" class="btn btn-add-cart btn-lg">
+                Shop Now
+                <i class="bi bi-arrow-down ms-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <section class="product-section" id="products">
+        <div class="container">
+            <h2 class="section-title">Our Premium Selection</h2>
+            <p class="section-subtitle">Choose from our carefully curated collection of the world's finest mango varieties</p>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1553279968-e8f4e2f29d1c?w=500&h=250&fit=crop" alt="Alphonso Mango" class="product-image">
+                        <div class="product-body">
+                            <span class="product-badge">Best Seller</span>
+                            <h3 class="product-name">Alphonso Mango</h3>
+                            <p class="product-description">
+                                The "King of Mangoes" from India. Known for its rich, creamy texture and sweet, aromatic flavor. Perfect for desserts and fresh eating.
+                            </p>
+                            <div class="product-details">
+                                <div class="product-price">$12.99<span class="fs-6 text-muted">/kg</span></div>
+                                <div class="product-stock">
+                                    <i class="bi bi-check-circle-fill me-1"></i>In Stock
+                                </div>
+                            </div>
+                            <button class="btn-add-cart">
+                                <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=500&h=250&fit=crop" alt="Kesar Mango" class="product-image">
+                        <div class="product-body">
+                            <span class="product-badge">Premium</span>
+                            <h3 class="product-name">Kesar Mango</h3>
+                            <p class="product-description">
+                                Bright saffron color with exceptional sweetness. This aromatic variety from Gujarat is prized for its unique flavor and smooth, fiberless texture.
+                            </p>
+                            <div class="product-details">
+                                <div class="product-price">$13.99<span class="fs-6 text-muted">/kg</span></div>
+                                <div class="product-stock">
+                                    <i class="bi bi-check-circle-fill me-1"></i>In Stock
+                                </div>
+                            </div>
+                            <button class="btn-add-cart">
+                                <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1605027990121-cbae9681a534?w=500&h=250&fit=crop" alt="Tommy Atkins Mango" class="product-image">
+                        <div class="product-body">
+                            <span class="product-badge">Popular</span>
+                            <h3 class="product-name">Tommy Atkins</h3>
+                            <p class="product-description">
+                                Large, firm mangoes with beautiful red-orange skin. A versatile variety perfect for smoothies, salads, and cooking with a mild, sweet flavor.
+                            </p>
+                            <div class="product-details">
+                                <div class="product-price">$8.99<span class="fs-6 text-muted">/kg</span></div>
+                                <div class="product-stock">
+                                    <i class="bi bi-check-circle-fill me-1"></i>In Stock
+                                </div>
+                            </div>
+                            <button class="btn-add-cart">
+                                <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=500&h=250&fit=crop" alt="Kent Mango" class="product-image">
+                        <div class="product-body">
+                            <span class="product-badge">Sweet & Juicy</span>
+                            <h3 class="product-name">Kent Mango</h3>
+                            <p class="product-description">
+                                Rich, sweet flavor with minimal fiber. This large, oval-shaped mango is ideal for fresh consumption and has a long shelf life when ripe.
+                            </p>
+                            <div class="product-details">
+                                <div class="product-price">$10.99<span class="fs-6 text-muted">/kg</span></div>
+                                <div class="product-stock">
+                                    <i class="bi bi-check-circle-fill me-1"></i>In Stock
+                                </div>
+                            </div>
+                            <button class="btn-add-cart">
+                                <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1566281796817-93bc94d7dbd2?w=500&h=250&fit=crop" alt="Ataulfo Mango" class="product-image">
+                        <div class="product-body">
+                            <span class="product-badge">Honey Gold</span>
+                            <h3 class="product-name">Ataulfo Mango</h3>
+                            <p class="product-description">
+                                Small, golden mangoes with creamy, non-fibrous flesh. Known as "honey mango" for its exceptionally sweet, tropical flavor and smooth texture.
+                            </p>
+                            <div class="product-details">
+                                <div class="product-price">$11.99<span class="fs-6 text-muted">/kg</span></div>
+                                <div class="product-stock">
+                                    <i class="bi bi-check-circle-fill me-1"></i>In Stock
+                                </div>
+                            </div>
+                            <button class="btn-add-cart">
+                                <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1628773822503-930a7eaecf80?w=500&h=250&fit=crop" alt="Haden Mango" class="product-image">
+                        <div class="product-body">
+                            <span class="product-badge">Classic</span>
+                            <h3 class="product-name">Haden Mango</h3>
+                            <p class="product-description">
+                                The original Florida mango with vibrant red and green skin. Sweet and mildly tart with a firm texture, perfect for slicing and grilling.
+                            </p>
+                            <div class="product-details">
+                                <div class="product-price">$9.99<span class="fs-6 text-muted">/kg</span></div>
+                                <div class="product-stock">
+                                    <i class="bi bi-check-circle-fill me-1"></i>In Stock
+                                </div>
+                            </div>
+                            <button class="btn-add-cart">
+                                <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="about">
+        <div class="container">
+            <h2 class="section-title">Why Choose MangoMarket?</h2>
+            <p class="section-subtitle">We're committed to delivering the finest quality mangoes with exceptional service</p>
+
+            <div class="row g-4 mt-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-truck"></i>
+                        </div>
+                        <h3 class="feature-title">Fast Delivery</h3>
+                        <p class="feature-text">Fresh mangoes delivered to your doorstep within 24-48 hours of harvest. We ensure peak ripeness and quality.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-award"></i>
+                        </div>
+                        <h3 class="feature-title">Premium Quality</h3>
+                        <p class="feature-text">Hand-selected from certified organic orchards. Every mango is inspected for quality, size, and perfect ripeness.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3 class="feature-title">Money-Back Guarantee</h3>
+                        <p class="feature-text">100% satisfaction guaranteed. Not happy with your mangoes? We'll refund or replace them, no questions asked.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>🥭 &copy; 2026 MangoMarket. All rights reserved. Freshly picked from our tropical orchards.</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

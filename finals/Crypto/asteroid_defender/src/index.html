@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astral Roulette — Asteroid Defense System</title>
+    <meta name="description" content="Station Aurora-9's defense grid has failed. Predict incoming asteroid trajectories to save the station.">
+    <link rel="stylesheet" href="style.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <div class="container">
+        <header>
+            <h1>SYS.DEF // ASTEROID_RADAR_V9</h1>
+            <div class="status-bar">
+                <span class="status-indicator"></span>
+                <span id="system-status">INITIALIZING...</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="radar-container">
+                <canvas id="radar-canvas" width="300" height="300"></canvas>
+                <div class="radar-label">AURORA-9 RADAR</div>
+            </div>
+
+            <div class="control-panel">
+
+                <div class="panel streak-panel">
+                    <h2>DEFENSE STREAK</h2>
+                    <div class="streak-row">
+                        <span id="streak-count">0</span>
+                        <span class="streak-divider">/ 100</span>
+                    </div>
+                    <div class="streak-bar-wrap">
+                        <div class="streak-bar" id="streak-bar" style="width:0%"></div>
+                    </div>
+                </div>
+
+                <div class="panel readout-panel">
+                    <h2>TRAJECTORY SCANNER</h2>
+                    <div class="sig-grid">
+                        <div class="sig-item">
+                            <div class="sig-label">RAW SIGNATURE (32-bit)</div>
+                            <div class="value-display" id="trajectory-display">AWAITING...</div>
+                        </div>
+                        <div class="sig-item">
+                            <div class="sig-label">IMPACT SECTOR</div>
+                            <div class="sector-display" id="sector-display">---</div>
+                        </div>
+                    </div>
+                    <button class="btn secondary" id="btn-observe">
+                        <span class="btn-text">[ OBSERVE IMPACT ]</span>
+                    </button>
+                    <div class="sub-text">Let asteroid through — reveals trajectory signature &amp; sector.</div>
+                </div>
+
+                <div class="panel defend-panel">
+                    <h2>PREDICT &amp; DEFEND</h2>
+                    <p class="hint-text">Activate the shield in the sector you predict the next asteroid will hit.</p>
+                    <div class="compass-grid" id="compass-grid">
+                        <button class="sector-btn" id="sector-7" data-sector="7">NW</button>
+                        <button class="sector-btn" id="sector-0" data-sector="0">N</button>
+                        <button class="sector-btn" id="sector-1" data-sector="1">NE</button>
+                        <button class="sector-btn" id="sector-6" data-sector="6">W</button>
+                        <div class="compass-center">✦</div>
+                        <button class="sector-btn" id="sector-2" data-sector="2">E</button>
+                        <button class="sector-btn" id="sector-5" data-sector="5">SW</button>
+                        <button class="sector-btn" id="sector-4" data-sector="4">S</button>
+                        <button class="sector-btn" id="sector-3" data-sector="3">SE</button>
+                    </div>
+                    <div id="defend-result" class="defend-result hidden"></div>
+                    <div id="flag-display" class="flag-display hidden"></div>
+                </div>
+
+            </div>
+        </main>
+
+        <div class="logs-container">
+            <h3>TERMINAL // RADAR LOGS</h3>
+            <div class="logs" id="terminal-logs">
+                <div class="log-entry sys">Booting Aurora-9 defense systems...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js?v=3"></script>
+</body>
+</html>

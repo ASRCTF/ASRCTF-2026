@@ -1,0 +1,11 @@
+Brainfuck Dialect (eXORlang)
+
+    Standard instructions:
+        > < + - . , [ ]
+    Additional instruction:
+        Semantics:
+            @ = current_cell ^= cell_0
+    Memory:
+        8-bit wrapping cells
+        Infinite tape to the right
+        Pointer starts at cell 0

@@ -1,0 +1,9 @@
+Challenge: Speedrun
+Creator: nmluan
+
+Description:
+A deranged speedrunner claims they found a flag hidden inside a janky
+homebrew NES ROM. The leaderboard says their run ends on frame 312, but
+nobody can replicate it.
+
+Distributed file: speedrun.nes

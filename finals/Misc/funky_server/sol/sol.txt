@@ -1,0 +1,3 @@
+To get to the eval part just mess around with global var in python (set it to a none type)
+For the eval bypass all the blacklist and spawn a "shell" using code() and profit
+For full workflow just check the solve script (running the solve script won't work)

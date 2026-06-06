@@ -1,0 +1,20 @@
+Challenge: know_it_all
+Creator: nmluan
+
+Description:
+The NEXUS facility runs on the assumption that no single operator
+understands every layer of the stack. Each challenge hides one piece
+of a larger secret. Only by working through all six: forensics, rev,
+crypto, osint, web, and pwn, will the full picture emerge.
+
+Distributed files:
+  calibration.png   [forensics]
+  vault             [rev]
+  message.txt       [crypto]
+  report.pdf        [osint]
+
+Connect to the web service at <host>:<port>
+Connect to the pwn service at <host>:<port>
+
+
+TODO: (for infra) fill in the <host> and <port> placeholders in this and the webserver.py file

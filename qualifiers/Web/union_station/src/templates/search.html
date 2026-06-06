@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="signal-shadow" content="ASRCTF{json_connector_static_noise}">
+<title>Archive Search · UNIONSTATION</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500&family=Azeret+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #07090C;
+    --bg2:     #0C0F14;
+    --bg3:     #111520;
+    --border:  #1C2233;
+    --border2: #252E42;
+    --amber:   #F0A020;
+    --amber2:  #FFB840;
+    --teal:    #7CFFD4;
+    --red:     #FF5A5A;
+    --text:    #D8E0F0;
+    --muted:   #4A5570;
+    --muted2:  #2E3850;
+  }
+
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; }
+
+  /* STARFIELD */
+  .starfield { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle var(--d,3s) ease-in-out infinite var(--delay,0s); }
+  @keyframes twinkle { 0%,100%{opacity:var(--lo,.1)} 50%{opacity:var(--hi,.6)} }
+
+  .scanlines {
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,.07) 3px, rgba(0,0,0,.07) 4px);
+    pointer-events: none; z-index: 1;
+  }
+
+  /* LAYOUT */
+  .shell { position: relative; z-index: 2; height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(7,9,12,.92);
+    animation: fadeDown .6s ease both;
+  }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+  @keyframes fadeUp   { from{opacity:0;transform:translateY(8px)}  to{opacity:1;transform:none} }
+  @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+  @keyframes fadeRight{ from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:none} }
+
+  .topbar-left { display: flex; align-items: center; gap: 20px; }
+  .logo { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 900; letter-spacing: .04em; color: var(--text); }
+  .logo em { font-style: normal; color: var(--amber); }
+  .topbar-sep { width: 1px; height: 18px; background: var(--border2); }
+  .mission-id { font-family: 'Azeret Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: .12em; }
+  .topbar-right { display: flex; align-items: center; gap: 20px; }
+
+  .live-indicator { font-family: 'Azeret Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: .1em; display: flex; align-items: center; gap: 6px; }
+  .live-dot { width: 6px; height: 6px; background: var(--amber); border-radius: 50%; animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+
+  .timer { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: .06em; }
+  .timer span { color: var(--text); }
+
+  /* MAIN DECK */
+  .main { display: grid; grid-template-columns: 1fr 485px; overflow: hidden; }
+
+  .graphics-panel { position: relative; border-right: 1px solid var(--border); overflow: hidden; animation: fadeIn .8s .2s ease both; display: flex; align-items: center; justify-content: center; }
+  .graphics-svg { width: 85%; height: 85%; }
+  .graphics-label { position: absolute; font-family: 'Azeret Mono', monospace; font-size: 8px; color: var(--muted); letter-spacing: .12em; top: 18px; left: 24px; }
+
+  .card-panel { display: flex; flex-direction: column; background: var(--bg2); overflow-y: auto; justify-content: center; }
+  .card-inner { padding: 38px 34px 30px; animation: fadeRight .7s .3s ease both; }
+
+  .card-eyebrow {
+    font-family: 'Azeret Mono', monospace; font-size: 8px; color: var(--muted);
+    letter-spacing: .18em; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .card-eyebrow::before { content:''; display:block; width:20px; height:1px; background:var(--amber); }
+
+  .card-h { font-family: 'Syne', sans-serif; font-size: 34px; font-weight: 900; line-height: .95; letter-spacing: -.03em; color: var(--text); margin-bottom: 8px; }
+  .card-h em { font-style: normal; color: var(--amber); display: block; }
+  .card-sub { font-size: 13.5px; color: var(--muted); line-height: 1.5; margin-bottom: 20px; }
+
+  /* Forms */
+  form { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+  .field { margin-bottom: 4px; }
+  .field-label { font-family: 'Azeret Mono', monospace; font-size: 8px; color: var(--muted); letter-spacing: .14em; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .field-label span { color: var(--border2); font-size: 7px; }
+  
+  .field-input {
+    width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px;
+    padding: 12px 14px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text);
+    outline: none; transition: border-color .2s, background .2s; letter-spacing: .04em;
+  }
+  .field-input:focus { border-color: var(--amber); background: rgba(240,160,32,.04); }
+
+  .action-btn {
+    width: 100%; background: var(--amber); color: var(--bg); border: none; border-radius: 6px;
+    padding: 14px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 800;
+    letter-spacing: .06em; cursor: pointer; margin-top: 6px;
+    transition: background .15s, transform .1s; text-align: center; text-decoration: none;
+  }
+  .action-btn:hover { background: var(--amber2); }
+  .action-btn:active { transform: scale(.98); }
+
+  .action-btn.secondary {
+    background: transparent; border: 1px solid var(--border2); color: var(--text);
+  }
+  .action-btn.secondary:hover { background: rgba(255,255,255,.03); border-color: var(--muted); }
+
+  /* Results list */
+  .results-list { display: flex; flex-direction: column; gap: 10px; margin: 1.25rem 0; max-height: 200px; overflow-y: auto; padding-right: 4px; }
+  .results-list::-webkit-scrollbar { width: 4px; }
+  .results-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+  .result-card {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 6px;
+    padding: 12px 16px; font-family: 'Space Mono', monospace; font-size: 11px;
+  }
+  .result-title { font-weight: 700; color: var(--amber); margin-bottom: 6px; display: block; }
+  .result-body { color: var(--text); line-height: 1.4; font-size: 10.5px; }
+
+  .manifest-label {
+    font-family: 'Azeret Mono', monospace; font-size: 8px; color: var(--muted);
+    letter-spacing: .14em; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .alg-tag {
+    background: rgba(240,160,32,.1); border: 1px solid rgba(240,160,32,.25);
+    color: var(--amber); font-size: 7px; padding: 2px 8px; border-radius: 3px; letter-spacing: .1em;
+  }
+
+  .back-link { display: inline-block; font-size: 12px; color: var(--muted); margin-top: 1rem; text-decoration: none; }
+  .back-link:hover { color: var(--amber); }
+
+  /* SQL preview */
+  .preview-query {
+    font-family: 'Space Mono', monospace; background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px;
+    font-size: 9px; color: var(--muted); margin: 10px 0; word-break: break-all;
+  }
+  .preview-query strong { color: var(--amber); }
+
+  .error-box {
+    background: rgba(255,90,90,.1); border: 1px solid rgba(255,90,90,.25);
+    border-radius: 6px; padding: 10px 14px; margin-bottom: 1rem;
+    color: var(--red); font-size: 11px; font-family: 'Space Mono', monospace;
+  }
+
+  .sig-badge {
+    flex-shrink: 0; font-family: 'Azeret Mono', monospace; font-size: 8px;
+    color: var(--amber); border: 1px solid rgba(240,160,32,.3); padding: 4px 8px;
+    border-radius: 3px; letter-spacing: .1em; margin-bottom: 12px;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    height: 32px; display: flex; align-items: center; padding: 0 32px;
+    border-top: 1px solid var(--border); background: rgba(7,9,12,.92);
+    gap: 24px; animation: fadeUp .6s .4s ease both;
+  }
+  .si { font-family: 'Azeret Mono', monospace; font-size: 8px; color: var(--muted); letter-spacing: .1em; display: flex; align-items: center; gap: 5px; }
+  .si .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .dot-g { background: #7DFF6B; }
+  .dot-a { background: var(--amber); }
+  .si.hl { color: var(--text); }
+  .si-right { margin-left: auto; }
+</style>
+</head>
+<body>
+
+<div class="starfield" id="starfield"></div>
+<div class="scanlines"></div>
+
+<div class="shell">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo">UNION<em>STATION</em></div>
+      <div class="topbar-sep"></div>
+      <div class="mission-id">MISSION · STS-CTF-07 · ARCHIVAL DATA SEARCH</div>
+    </div>
+    <div class="topbar-right">
+      <div class="live-indicator"><div class="live-dot"></div>PORTAL LIVE</div>
+      <div class="timer">T+ <span id="clock">00:00:00</span></div>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- SIGNAL GRAPHICS -->
+    <div class="map-panel graphics-panel">
+      <div class="graphics-label">// LOGISTICS DECK · ARCHIVE NODES</div>
+      <svg class="graphics-svg" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="480" fill="url(#grid)" opacity=".55"/>
+        <line x1="300" y1="0" x2="300" y2="480" stroke="#1C2233" stroke-width=".5"/>
+        <line x1="0" y1="240" x2="600" y2="240" stroke="#1C2233" stroke-width=".5"/>
+        
+        <!-- Rotating ring -->
+        <ellipse cx="300" cy="240" rx="160" ry="160" fill="none" stroke="var(--border)" stroke-width=".5" stroke-dasharray="4 6">
+          <animateTransform attributeName="transform" type="rotate" from="0 300 240" to="360 300 240" dur="20s" repeatCount="indefinite"/>
+        </ellipse>
+      </svg>
+    </div>
+
+    <!-- ENTRY FORM CARD -->
+    <div class="card-panel">
+      <div class="card-inner">    
+        <div class="card-eyebrow">COMMAND DECK DISPATCH</div>
+        <div class="card-h">Signal<br><em>Archiver.</em></div>
+        <div class="card-sub">Archived journalism article drafts. Logged in as: <strong>{{ current_username }}</strong></div>
+
+        <form method="get">
+          <div class="field">
+            <div class="field-label">SEARCH ARCHIVE PARAMETER <span>QUERY</span></div>
+            <input name="q" class="field-input" value="{{ query }}" placeholder="Search dispatch archive..." autocomplete="off">
+          </div>
+
+          <button type="submit" class="action-btn">EXECUTE SEARCH QUERY →</button>
+        </form>
+
+        <div class="sig-badge" style="display:inline-block; font-size: 9px; animation: none; border-color: var(--border); color: var(--muted); margin-bottom: 12px; margin-top: 12px; width: 100%; text-align: center;">
+          INFO: Advanced signal clients may POST JSON filters to <code>/api/search</code>.
+        </div>
+        <!-- decoy flag: ASRCTF{broadcast_union_null_padding} -->
+
+        {% if raw_sql %}
+            <div class="preview-query"><strong>Preview query:</strong> <code>{{ raw_sql }}</code></div>
+        {% endif %}
+
+        {% if error %}
+            <div class="error-box"><strong>Error:</strong> {{ error }}</div>
+        {% endif %}
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="error-box" style="background: rgba(125,255,107,.1); border-color: rgba(125,255,107,.25); color: #7DFF6B;">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <div class="manifest-label" style="margin-top:1.5rem;">
+          DISPATCH RESULTS
+          <span class="alg-tag">MATCHED RECORDS</span>
+        </div>
+
+        <div class="results-list">
+          {% for row in rows %}
+              <div class="result-card">
+                  <span class="result-title">#{{ row['id'] }} · {{ row['title'] }}</span>
+                  <div class="result-body">{{ row['body'] }}</div>
+              </div>
+          {% else %}
+              {% if query %}
+                  <div class="result-card" style="text-align: center; color: var(--muted);">No matching dispatches registered.</div>
+              {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="manifest-label" style="margin-top:2rem;">
+          SEARCH PREFERENCES
+          <span class="alg-tag">JSON PROFILE</span>
+        </div>
+        <div class="card-sub" style="font-size: 11px; margin-bottom: 12px;">
+          Customize your search profile. This profile will be queried during advanced search operations.
+        </div>
+        <form method="post" action="{{ url_for('update_profile') }}">
+          <div class="field">
+            <textarea name="profile_json" rows="4" class="field-input" style="font-family: 'Space Mono', monospace; font-size: 11px; resize: vertical;">{{ profile_json }}</textarea>
+          </div>
+          <button type="submit" class="action-btn secondary" style="font-size: 9px; padding: 10px;">SAVE PREFERENCES →</button>
+        </form>
+
+        <a href="{{ url_for('logout') }}" class="back-link">← Terminate secure handshake (Logout)</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="status-bar">
+    <div class="si"><div class="dot dot-g"></div>LIFE SUPPORT NOMINAL</div>
+    <div class="si hl">ARCHIVE DATABANK QUERIED</div>
+    <div class="si si-right">ARCHIVE SERVICE v1.1</div>
+  </footer>
+
+</div>
+
+<script>
+  // Starfield
+  const sf = document.getElementById('starfield');
+  for (let i = 0; i < 160; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() < .8 ? 1 : Math.random() < .6 ? 1.5 : 2;
+    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s;--lo:${.04+Math.random()*.1};--hi:${.35+Math.random()*.55};`;
+    sf.appendChild(s);
+  }
+  // Mission clock
+  let sec = 0;
+  const cl = document.getElementById('clock');
+  setInterval(() => {
+    sec++;
+    const h = String(Math.floor(sec/3600)).padStart(2,'0');
+    const m = String(Math.floor((sec%3600)/60)).padStart(2,'0');
+    const s = String(sec%60).padStart(2,'0');
+    cl.textContent = `${h}:${m}:${s}`;
+  }, 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "source": "waystation_orrery_corrupted_culture_relay",
+  "trust": "low",
+  "recording_1": {
+    "comment": "ASRCTF{coastal_orbit_birthdate_cache}",
+    "decoder_note": "Recovered from a stale relay index, not from the clean audio."
+  },
+  "recording_2": {
+    "comment": "ASRCTF{animation_release_telemetry}",
+    "decoder_note": "Autoplay labels in this cache are known to drift."
+  }
+}

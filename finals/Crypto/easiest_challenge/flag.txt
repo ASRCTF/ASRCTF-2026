@@ -1,0 +1,1 @@
+ASRCTF{congrats_you_solved_the_easiest_challenge}

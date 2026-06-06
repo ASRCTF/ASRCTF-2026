@@ -1,0 +1,8 @@
+msg1           = MISSION LOG 2031-05-14: Nominal telemetry. All systems green.
+msg2           = MISSION LOG 2031-05-15: Routine orbital adjustment complete.
+Qx             = 0x55e421fe06416c1c99b1bb0cfe38252bd8ebf525e2525e3a86f2570c83379cbd
+Qy             = 0x64f040ba4b784ba7d0844b1da5f179135539bff54779aa97f16638201299041a
+r              = 0xc16779e963c4f32632862c719c60eb3e6e8c1ad9b58c78a5bdac6a94bce239d7
+s1             = 0x4c63118563c3582cd469646828012e6d5e5a8469b33e7e145b957ceebe0444e1
+s2             = 0xdb7c55d33af652f67c704292c446212ad4a602ca96cbb721671e6a26a1962e8d
+encrypted_flag = 1c66a217927af58630ca2eba820f0c29282d137cfe09b2be0b048180dc6e501bd96d0012529947

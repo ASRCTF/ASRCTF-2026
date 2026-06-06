@@ -1,0 +1,19 @@
+choice 5, pw = "teto"
+get m+t+n
+
+choice 2,
+get mG, tG, nG
+Heuristic: sum of squares (m^2G+...) is 0 (mod order)
+
+choice 3,
+get sum of cubes (m^3G+...)
+
+choice 4, 
+
+choice 2, 
+get mtG, tnG, nmG
+
+choice 6,
+get data
+
+choice 7

@@ -1,0 +1,11 @@
+<%- include('header') %>
+<div class="hero">
+    <h1>Welcome to Ares Deep Space Observatory</h1>
+    <p>Cataloging anomalous radio signals from deep space.</p>
+    <% if (typeof user === 'undefined' || !user) { %>
+        <p><a href="/login" class="btn">Access Terminal</a></p>
+    <% } else { %>
+        <p><a href="/dashboard" class="btn">View Signals</a></p>
+    <% } %>
+</div>
+<%- include('footer') %>

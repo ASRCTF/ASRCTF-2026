@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NebulaMart — The Galaxy's Premier Artifact Auction House</title>
+  <meta name="description" content="Bid on rare space artifacts, meteorite fragments, cosmic relics, and more at NebulaMart — the galaxy's most exclusive auction platform." />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪐</text></svg>" />
+  <style>
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="wrap nav-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">🪐</span>
+      Nebula<span>Mart</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" class="active">Auctions</a></li>
+      <li><a href="#">Collections</a></li>
+      <li><a href="#">How It Works</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Galactic Auction Week — 47 Active Lots
+    </div>
+    <h1>
+      Bid on Wonders<br />
+      <span class="gradient-text">From Beyond the Stars</span>
+    </h1>
+    <p class="hero-sub">
+      NebulaMart is the galaxy's most exclusive marketplace for verified space artifacts,
+      meteorite specimens, cosmic relics, and deep-space collectibles. Every piece, authenticated.
+    </p>
+    <a href="#auctions" class="hero-cta">
+      🚀 Browse Live Auctions
+    </a>
+  </div>
+</section>
+
+<!-- ── Stats Bar ──────────────────────────────────────────────────────────── -->
+<div class="wrap">
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value">2,847</div>
+      <div class="stat-label">Artifacts Sold</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">47</div>
+      <div class="stat-label">Live Auctions</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">₢ 4.2M</div>
+      <div class="stat-label">Total Volume</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">1,293</div>
+      <div class="stat-label">Verified Bidders</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── VIP Banner ─────────────────────────────────────────────────────────── -->
+<div class="wrap">
+  <div class="vip-banner">
+    <div class="vip-icon">🔒</div>
+    <div class="vip-text">
+      <h2>🌟 <span class="gold">VIP Auctions</span> — Invitation Only</h2>
+      <p>
+        A select number of ultra-rare artifacts are auctioned in private, invite-only rooms reserved for our most elite clients.
+        These lots never appear on the public listings. If you have a room code, connect directly to the auction endpoint.
+        <br /><br />
+        <strong>Not an elite member?</strong> Perhaps our developer left a breadcrumb somewhere.
+        We've heard <a href="/github/" id="github-hint-link">their GitHub</a> is… not always as private as it should be.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Public Auctions ────────────────────────────────────────────────────── -->
+<section id="auctions" class="section">
+  <div class="wrap">
+    <div class="section-header">
+      <h2 class="section-title">Live <span class="accent">Public</span> Auctions</h2>
+      <a href="#" class="section-link">View all →</a>
+    </div>
+
+    <div class="auction-grid">
+
+      <!-- Card 1 -->
+      <article class="card" id="lot-kepler-dust">
+        <div class="card-thumb-inner" style="position:relative;">
+          <span class="emoji">☄️</span>
+          <span class="card-badge">LIVE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Meteorite</div>
+          <h3 class="card-title">Kepler-186 Dust Fragment</h3>
+          <p class="card-desc">Micro-fragment captured during the 2041 Kepler survey mission. 4.2 billion years old. Spectral signature confirmed.</p>
+          <div class="card-footer">
+            <div class="bid-info">
+              <span class="bid-label">Current Bid</span>
+              <span class="bid-amount" id="bid-lot1">₢ 128,500</span>
+            </div>
+            <div class="time-info">
+              <div class="time-label">Ends In</div>
+              <div class="countdown" id="timer-lot1">
+                <span id="h1">02</span><span class="colon">:</span><span id="m1">17</span><span class="colon">:</span><span id="s1">44</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card" id="lot-nebula-glass">
+        <div class="card-thumb-inner" style="position:relative;">
+          <span class="emoji">🔮</span>
+          <span class="card-badge">LIVE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Cosmic Glass</div>
+          <h3 class="card-title">Orion Nebula Tektite</h3>
+          <p class="card-desc">Formed by a supernova shockwave passing through a proto-planetary disk. Iridescent blue-green surface. One of 12 known specimens.</p>
+          <div class="card-footer">
+            <div class="bid-info">
+              <span class="bid-label">Current Bid</span>
+              <span class="bid-amount" id="bid-lot2">₢ 342,000</span>
+            </div>
+            <div class="time-info">
+              <div class="time-label">Ends In</div>
+              <div class="countdown" id="timer-lot2">
+                <span id="h2">05</span><span class="colon">:</span><span id="m2">42</span><span class="colon">:</span><span id="s2">10</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card" id="lot-pulsar-chip">
+        <div class="card-thumb-inner" style="position:relative;">
+          <span class="emoji">⚡</span>
+          <span class="card-badge">LIVE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Energy Crystal</div>
+          <h3 class="card-title">Pulsar Core Shard</h3>
+          <p class="card-desc">Piezoelectric crystal formed under neutron star gravitational conditions. Emits faint EM pulses. Handle with shielding.</p>
+          <div class="card-footer">
+            <div class="bid-info">
+              <span class="bid-label">Current Bid</span>
+              <span class="bid-amount" id="bid-lot3">₢ 891,750</span>
+            </div>
+            <div class="time-info">
+              <div class="time-label">Ends In</div>
+              <div class="countdown" id="timer-lot3">
+                <span id="h3">00</span><span class="colon">:</span><span id="m3">58</span><span class="colon">:</span><span id="s3">22</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 (ended) -->
+      <article class="card" id="lot-dark-matter" style="opacity:0.6;">
+        <div class="card-thumb-inner" style="position:relative;">
+          <span class="emoji">🌑</span>
+          <span class="card-badge ended">ENDED</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Theoretical Relic</div>
+          <h3 class="card-title">Dark Matter Containment Pod</h3>
+          <p class="card-desc">Decommissioned CERN-adjacent containment vessel. Theoretical dark matter exposure confirmed by independent physicists.</p>
+          <div class="card-footer">
+            <div class="bid-info">
+              <span class="bid-label">Final Bid</span>
+              <span class="bid-amount">₢ 2,400,000</span>
+            </div>
+            <div class="time-info">
+              <div class="time-label">Status</div>
+              <div class="time-value" style="color:var(--text-dim);">Sold</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 5 (ended) -->
+      <article class="card" id="lot-moon-rock" style="opacity:0.6;">
+        <div class="card-thumb-inner" style="position:relative;">
+          <span class="emoji">🌕</span>
+          <span class="card-badge ended">ENDED</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Lunar Sample</div>
+          <h3 class="card-title">Apollo-Adjacent Lunar Regolith</h3>
+          <p class="card-desc">Official-grade lunar surface material, collected during the Artemis III auxiliary mission. 47g sealed vial.</p>
+          <div class="card-footer">
+            <div class="bid-info">
+              <span class="bid-label">Final Bid</span>
+              <span class="bid-amount">₢ 760,000</span>
+            </div>
+            <div class="time-info">
+              <div class="time-label">Status</div>
+              <div class="time-value" style="color:var(--text-dim);">Sold</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="card" id="lot-stardust-public">
+        <div class="card-thumb-inner" style="position:relative;">
+          <span class="emoji">✨</span>
+          <span class="card-badge">LIVE</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Nebula Dust</div>
+          <h3 class="card-title">Crab Nebula Stardust Vial</h3>
+          <p class="card-desc">40ml sealed ampoule of post-supernova interstellar dust from the Crab Nebula remnant. Certified by the Galactic Registry.</p>
+          <div class="card-footer">
+            <div class="bid-info">
+              <span class="bid-label">Current Bid</span>
+              <span class="bid-amount" id="bid-lot6">₢ 55,000</span>
+            </div>
+            <div class="time-info">
+              <div class="time-label">Ends In</div>
+              <div class="countdown" id="timer-lot6">
+                <span id="h6">11</span><span class="colon">:</span><span id="m6">03</span><span class="colon">:</span><span id="s6">55</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="wrap footer-inner">
+    <p class="footer-copy">© 2147 NebulaMart Industries. All artifacts authenticated by the Galactic Registry.</p>
+    <ul class="footer-links">
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="/github/">Dev Portal</a></li>
+      <li><a href="#">Support</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+// ── Fake countdown timers ─────────────────────────────────────────────────────
+const timers = [
+  { h: 'h1', m: 'm1', s: 's1', secs: 2 * 3600 + 17 * 60 + 44 },
+  { h: 'h2', m: 'm2', s: 's2', secs: 5 * 3600 + 42 * 60 + 10 },
+  { h: 'h3', m: 'm3', s: 's3', secs: 58 * 60 + 22 },
+  { h: 'h6', m: 'm6', s: 's6', secs: 11 * 3600 + 3 * 60 + 55 },
+];
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function tick() {
+  for (const t of timers) {
+    if (t.secs <= 0) continue;
+    t.secs--;
+    const h = Math.floor(t.secs / 3600);
+    const m = Math.floor((t.secs % 3600) / 60);
+    const s = t.secs % 60;
+    document.getElementById(t.h).textContent = pad(h);
+    document.getElementById(t.m).textContent = pad(m);
+    document.getElementById(t.s).textContent = pad(s);
+  }
+}
+setInterval(tick, 1000);
+
+// ── Fake live bids ────────────────────────────────────────────────────────────
+const bids = [
+  { el: 'bid-lot1', base: 128500, step: 1000 },
+  { el: 'bid-lot2', base: 342000, step: 2500 },
+  { el: 'bid-lot6', base: 55000,  step: 500  },
+];
+
+function bump() {
+  const b = bids[Math.floor(Math.random() * bids.length)];
+  b.base += b.step + Math.floor(Math.random() * b.step);
+  const el = document.getElementById(b.el);
+  if (el) {
+    el.textContent = '₢ ' + b.base.toLocaleString('en-US');
+    el.style.color = '#fff';
+    el.style.transition = 'color 0.1s';
+    setTimeout(() => { el.style.color = 'var(--gold)'; }, 150);
+  }
+}
+setInterval(bump, 7000 + Math.random() * 5000);
+</script>
+
+
+</body>
+</html>

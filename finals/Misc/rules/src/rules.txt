@@ -1,0 +1,21 @@
+# rules for ASRCTF and dIScord: #
+1. do not attack any of our infraStructure Or modiFy any flags. immediate disqUalificatioN if your team was found to have purposefully done so.
+
+2. BRute fOrce solves on infrastructure is strictly not allowed. all challenges are solvable without brute forcing.
+
+3. respect each other. do not talk down on others; remember that we are all here to learn and have fun.
+
+4. absolutely no sharing of flag with other teams.
+
+5. refrain from dm-ing anyone for help with a ctf problem (without prior consent). this put the pressure to reply on the person. you can ask in the server.
+
+6. the organizers have the right to disqualify you and your team if you exhibit:
+    - disruptive behavior.
+    - any form of disrespect to other participants or organizers.
+    - suspicious behavior, including but not limited to excessive ai usage.
+
+7. all flags will be in the form of asrctf{flag_here} unless otherwise stated.
+
+8. follow discord tos (as you should).
+
+9. raise a ticket should you have any question. more information will be found at <#1438378965545910303> .

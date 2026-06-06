@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+  <h1 style="font-size:24px; font-weight:700;">My Notes</h1>
+  <a href="/note/new" class="btn">+ New Note</a>
+</div>
+{% if notes %}
+<div style="display:grid; gap:1rem;">
+  {% for note in notes %}
+  <a href="/note/{{ note.id + '.txt' }}" style="text-decoration:none; color:inherit;">
+    <div style="background:#fff; border:1px solid #e5e3dc; border-radius:10px; padding:1.25rem 1.5rem;"
+         onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'"
+         onmouseout="this.style.boxShadow='none'">
+      <div style="font-size:16px; font-weight:600; margin-bottom:6px;">{{ note.title }}</div>
+      <div style="font-size:13px; color:#6b6b6b;">{{ note.id }}.txt</div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div style="text-align:center; padding:5rem 0; color:#888;">
+  <div style="font-size:48px; margin-bottom:1rem;">📓</div>
+  <p style="font-size:16px; margin-bottom:1.5rem;">No notes yet.</p>
+  <a href="/note/new" class="btn">Create your first note</a>
+</div>
+{% endif %}
+{% endblock %}

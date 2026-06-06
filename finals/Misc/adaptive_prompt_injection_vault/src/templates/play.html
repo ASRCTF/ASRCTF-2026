@@ -1,0 +1,44 @@
+{% extends "base_public.html" %}
+
+{% block content %}
+<script>
+  window.ASRCTF_PUBLIC_FILTER = {{ creative_filter|tojson }};
+</script>
+<section class="grid two-up play-grid">
+  <article class="card reveal">
+    <div class="card-heading">
+      <h2>Prompt Lab</h2>
+      <span class="pill">Live challenge target</span>
+    </div>
+    <form id="chat-form" class="chat-form">
+      <label for="prompt-input">Send a prompt to the vault</label>
+      <textarea id="prompt-input" name="prompt" rows="9" placeholder="Type your prompt here..."></textarea>
+      <p class="supporting-text">Basic prompt-injection phrases are filtered. Creative payloads only.</p>
+      <div class="button-row">
+        <button type="submit" class="primary-button">Send Prompt</button>
+      </div>
+    </form>
+  </article>
+
+  <article class="card reveal delay-1">
+    <div class="card-heading">
+      <h2>Response</h2>
+      <span class="pill">Public interface</span>
+    </div>
+    <div id="chat-response" class="terminal-output">
+      <p>Responses will appear here.</p>
+    </div>
+    <div id="chat-meta" class="meta-row"></div>
+  </article>
+</section>
+
+<section class="card reveal delay-2">
+  <div class="card-heading">
+    <h2>Challenge Notes</h2>
+    <span class="pill">Participant brief</span>
+  </div>
+  <div class="entry">
+    <p>Use the web form above or send a JSON request to <code>/api/chat</code> with a <code>prompt</code> field.</p>
+  </div>
+</section>
+{% endblock %}

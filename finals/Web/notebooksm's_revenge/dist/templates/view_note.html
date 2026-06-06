@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width:680px;">
+  <div style="margin-bottom:1.5rem;">
+    <a href="/" style="font-size:13px; color:#888; text-decoration:none;">← Back to notes</a>
+  </div>
+  <div style="background:#fff; border:1px solid #e5e3dc; border-radius:12px; padding:2rem 2.25rem;">
+    <h1 style="font-size:22px; font-weight:700; margin-bottom:1.5rem;">{{ note.title }}</h1>
+    <div style="font-size:15px; line-height:1.75; color:#222; white-space:pre-wrap;">{{ note.content }}</div>
+  </div>
+</div>
+{% endblock %}

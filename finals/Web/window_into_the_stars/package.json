@@ -1,0 +1,16 @@
+{
+  "name": "deep-space-signals",
+  "version": "1.0.0",
+  "description": "XS-Leaks challenge",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "ejs": "^3.1.9",
+    "puppeteer": "^24.15.0",
+    "body-parser": "^1.20.2"
+  }
+}

@@ -1,0 +1,10 @@
+Revenge challenge of poorly written heapslop challenge.
+This challenge requires the use of house of tangerine, in which free is called due to insufficient space left in the top chunk (Wilderness).
+House of tangerine is explained here: https://github.com/shellphish/how2heap/blob/master/glibc_2.39/house_of_tangerine.c
+Anyways this challenge was quite heavily nerfed by me since the previous iteration of this challenge only allowed the user to write at most 200 bytes in the revisit and explore function.
+But idk if the challenge is solvable then.
+I didn't have enough time to test and since my days left before being sent to a not so remote island is coming I decided to nerf it.
+Also the heap base leak was kinda to make players have an easier life, since they could've probably got the leak through allocating a chunk in the tcache first lol.
+Anyways the sol is trigger free using sysmalloc to then get libc leak, and then use environ to get a stack leak to then get a rop chain.
+I didn't use fsop because I suck at fsop and if someone solves it with fsop please pm the discord handle as mentioned in the challenge (you'll get a bounty of 10 cents!).
+Solve script in go.py

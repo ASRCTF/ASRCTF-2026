@@ -1,0 +1,12 @@
+{
+  "name": "i_want_to_solve_the_challenge",
+  "version": "1.0.0",
+  "description": "CTF challenge server",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

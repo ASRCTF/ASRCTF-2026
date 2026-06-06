@@ -1,0 +1,8 @@
+{
+    "key1": "SPICA_98",
+    "key2": "HYPERION_ALPHA_7",
+    "key3": ["1997-061A", "1997-061a"],
+    "jwt_secret": "greenbank",
+    "required_role": "commander",
+    "flag": "ASRCTF{5t4lk1ng_thr0ugh_th3_c05m05_cf6a2}"
+}

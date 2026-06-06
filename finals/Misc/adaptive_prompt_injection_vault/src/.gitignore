@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+.env
+logs/
+runtime/
+legacy/
+solution/
+solution/successful_payloads.json
+solution/successful_payloads.md

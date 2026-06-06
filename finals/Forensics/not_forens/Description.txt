@@ -1,0 +1,15 @@
+Challenge: not_forens
+Creator: nmluan
+
+Description:
+    the final boss of forensics questions.
+
+    enjoy.
+
+    you will know the flag when you find it, if you ever will.
+
+    retrieve files using {HOST}:{PORT}/{file_name}
+
+    your first file is capture_47.pcap.
+
+    good luck.

@@ -1,0 +1,16 @@
+[package]
+name = "orbital_loader"
+version = "3.2.1"
+edition = "2021"
+description = "Orbital Relay Station 7 — Firmware Loader"
+authors = ["Orbital Systems Corp <eng@orbital-relay.space>"]
+
+[dependencies]
+# No external dependencies — stdlib only for cross-compilation simplicity
+
+[profile.release]
+opt-level = "s"
+lto = true
+# Keep symbols for reverse engineering (this is a CTF binary)
+strip = false
+debug = false

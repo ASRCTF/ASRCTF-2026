@@ -1,0 +1,48 @@
+{
+  "challenge": {
+    "backend": "openai",
+    "base_model": "llama-3.1-8b-instant",
+    "judge_model": "llama-3.1-8b-instant",
+    "openai_base_url": "https://api.groq.com/openai/v1",
+    "openai_api_keys": [
+      "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",
+      "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",
+      "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",
+      "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",
+      "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"
+    ],
+    "openai_request_timeout_seconds": 30,
+    "secret_flag": "ASRCTF{du4l_1lm_judG3_s3m4n71c_v3c70r_byp455_v2}"
+  },
+  "generation": {
+    "max_new_tokens": 512,
+    "temperature": 0.1,
+    "do_sample": true
+  },
+  "admin": {
+    "token": null,
+    "path": null,
+    "allowed_ips": [],
+    "allow_localhost_without_token": true
+  },
+  "server": {
+    "host": "0.0.0.0",
+    "port": 5000,
+    "threaded": true,
+    "threads": 8,
+    "prefer_waitress": false
+  },
+  "security": {
+    "max_request_bytes": 8192,
+    "max_prompt_chars": 2048,
+    "public_rate_limit_count": 120,
+    "public_rate_limit_window_seconds": 60,
+    "admin_rate_limit_count": 180,
+    "admin_rate_limit_window_seconds": 60,
+    "max_inflight_chat_requests": 4,
+    "chat_slot_timeout_seconds": 10,
+    "trust_proxy_headers": false,
+    "session_secret": null,
+    "session_cookie_secure": false
+  }
+}

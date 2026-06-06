@@ -1,0 +1,32 @@
+<%- include('header') %>
+<h2>Operator Dashboard</h2>
+<div class="signals-container">
+    <h3>Intercepted Signals</h3>
+    <% if (signals.length === 0) { %>
+        <p>No signals logged.</p>
+    <% } else { %>
+        <ul>
+        <% signals.forEach(sig => { %>
+            <li>[ID: <%= sig.id %>] <%= sig.title %></li>
+        <% }) %>
+        </ul>
+    <% } %>
+</div>
+<br>
+<div class="search-container">
+    <h3>Search Database</h3>
+    <form action="/search" method="GET" class="form-container">
+        <input type="text" name="q" placeholder="Enter signal frequency or content..." required>
+        <button type="submit" class="btn">Search</button>
+    </form>
+</div>
+<br>
+<div class="add-container">
+    <h3>Log New Signal</h3>
+    <form action="/dashboard" method="POST" class="form-container">
+        <input type="text" name="title" placeholder="Signal Origin" required>
+        <textarea name="content" placeholder="Decoded Transmissions" required></textarea>
+        <button type="submit" class="btn">Save to Archive</button>
+    </form>
+</div>
+<%- include('footer') %>

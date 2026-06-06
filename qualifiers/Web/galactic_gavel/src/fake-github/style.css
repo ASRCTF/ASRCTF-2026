@@ -1,0 +1,807 @@
+/* ── Google Fonts ──────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+/* ── GitHub-lookalike Design System ───────────────────────────────────────── */
+:root {
+  --gh-bg:           #0d1117;
+  --gh-surface:      #161b22;
+  --gh-border:       #30363d;
+  --gh-border-muted: #21262d;
+  --gh-text:         #e6edf3;
+  --gh-text-muted:   #7d8590;
+  --gh-text-link:    #58a6ff;
+  --gh-accent:       #1f6feb;
+  --gh-green:        #3fb950;
+  --gh-green-bg:     rgba(63,185,80,0.15);
+  --gh-red:          #f85149;
+  --gh-red-bg:       rgba(248,81,73,0.15);
+  --gh-yellow:       #d29922;
+  --gh-purple:       #bc8cff;
+  --gh-orange:       #ffa657;
+  --gh-radius:       6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 14px; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--gh-bg);
+  color: var(--gh-text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ── GitHub Top Nav ────────────────────────────────────────────────────────── */
+.gh-header {
+  background: #161b22;
+  border-bottom: 1px solid var(--gh-border);
+  padding: 0 16px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.gh-header-inner {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.gh-logo {
+  color: #f0f6fc;
+  flex-shrink: 0;
+}
+
+.gh-logo svg { display: block; }
+
+.gh-search {
+  flex: 1;
+  max-width: 272px;
+  background: #0d1117;
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  padding: 5px 12px;
+  color: var(--gh-text-muted);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: text;
+}
+
+.gh-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-left: auto;
+  list-style: none;
+}
+
+.gh-nav-links a {
+  color: var(--gh-text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: var(--gh-radius);
+  transition: background 0.15s;
+}
+
+.gh-nav-links a:hover { background: rgba(177,186,196,0.08); }
+
+.gh-avatar-nav {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2, #9b59b6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 2px solid var(--gh-border);
+}
+
+/* ── Layout ────────────────────────────────────────────────────────────────── */
+.gh-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 32px;
+}
+
+/* ── Profile Page ──────────────────────────────────────────────────────────── */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 296px 1fr;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.profile-sidebar {}
+
+.profile-avatar {
+  width: 296px;
+  height: 296px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a2a5e 0%, #2d1b69 50%, #0d2137 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7rem;
+  border: 1px solid var(--gh-border);
+  margin-bottom: 16px;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gh-text);
+  margin-bottom: 4px;
+}
+
+.profile-username {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--gh-text-muted);
+  margin-bottom: 16px;
+}
+
+.profile-bio {
+  font-size: 14px;
+  color: var(--gh-text);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.profile-follow-btn {
+  display: block;
+  width: 100%;
+  background: #21262d;
+  border: 1px solid rgba(240,246,252,0.1);
+  border-radius: var(--gh-radius);
+  color: var(--gh-text);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 16px;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 16px;
+  transition: background 0.15s;
+}
+
+.profile-follow-btn:hover { background: #30363d; }
+
+.profile-stats {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--gh-text-muted);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.profile-stats a {
+  color: var(--gh-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profile-stat-sep { color: var(--gh-border); }
+
+.profile-detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gh-text-muted);
+  margin-bottom: 8px;
+}
+
+.profile-detail svg { opacity: 0.6; flex-shrink: 0; }
+
+/* ── Tabs ──────────────────────────────────────────────────────────────────── */
+.profile-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--gh-border);
+  margin-bottom: 16px;
+  gap: 0;
+}
+
+.profile-tab {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gh-text-muted);
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.profile-tab.active {
+  color: var(--gh-text);
+  border-bottom-color: #f78166;
+}
+
+.profile-tab .count {
+  background: rgba(177,186,196,0.12);
+  border-radius: 20px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ── Contribution Graph (fake) ─────────────────────────────────────────────── */
+.contrib-section {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.contrib-title {
+  font-size: 13px;
+  color: var(--gh-text-muted);
+  margin-bottom: 12px;
+}
+
+.contrib-grid {
+  display: flex;
+  gap: 3px;
+}
+
+.contrib-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.contrib-cell {
+  width: 11px; height: 11px;
+  border-radius: 2px;
+  background: #161b22;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.contrib-cell.l1 { background: #0e4429; }
+.contrib-cell.l2 { background: #006d32; }
+.contrib-cell.l3 { background: #26a641; }
+.contrib-cell.l4 { background: #39d353; }
+
+/* ── Pinned Repos ──────────────────────────────────────────────────────────── */
+.pinned-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.pinned-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gh-text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.repo-card {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-decoration: none;
+  transition: border-color 0.15s;
+  cursor: pointer;
+}
+
+.repo-card:hover { border-color: var(--gh-text-link); }
+
+.repo-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.repo-card-icon { color: var(--gh-text-muted); }
+.repo-card-name { color: var(--gh-text-link); font-weight: 600; font-size: 13px; }
+.repo-card-visibility {
+  border: 1px solid var(--gh-border);
+  border-radius: 20px;
+  padding: 0 7px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gh-text-muted);
+}
+
+.repo-card-desc {
+  font-size: 12px;
+  color: var(--gh-text-muted);
+  line-height: 1.4;
+}
+
+.repo-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--gh-text-muted);
+}
+
+.repo-lang-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ── Repo Page ─────────────────────────────────────────────────────────────── */
+.repo-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.repo-breadcrumb .owner { color: var(--gh-text-link); text-decoration: none; }
+.repo-breadcrumb .owner:hover { text-decoration: underline; }
+.repo-breadcrumb .sep { color: var(--gh-text-muted); font-weight: 300; }
+.repo-breadcrumb .repo-name { color: var(--gh-text-link); }
+.repo-breadcrumb .vis-badge {
+  font-size: 12px;
+  border: 1px solid var(--gh-border);
+  border-radius: 20px;
+  padding: 2px 8px;
+  color: var(--gh-text-muted);
+  font-weight: 400;
+  align-self: center;
+}
+
+.repo-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--gh-border);
+  margin-bottom: 16px;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.repo-tab {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gh-text-muted);
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.repo-tab.active {
+  color: var(--gh-text);
+  border-bottom-color: #f78166;
+}
+
+.repo-tab .count {
+  background: rgba(177,186,196,0.12);
+  border-radius: 20px;
+  padding: 0 6px;
+  font-size: 11px;
+}
+
+.repo-meta-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.branch-select {
+  background: #21262d;
+  border: 1px solid rgba(240,246,252,0.1);
+  border-radius: var(--gh-radius);
+  padding: 4px 12px;
+  color: var(--gh-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.repo-action-btn {
+  background: #21262d;
+  border: 1px solid rgba(240,246,252,0.1);
+  border-radius: var(--gh-radius);
+  padding: 5px 12px;
+  color: var(--gh-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+/* ── File Tree ─────────────────────────────────────────────────────────────── */
+.file-tree {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.file-tree-header {
+  background: #161b22;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--gh-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.latest-commit-msg {
+  color: var(--gh-text);
+  font-weight: 600;
+  flex: 1;
+}
+
+.latest-commit-hash {
+  color: var(--gh-text-link);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+}
+
+.latest-commit-time { color: var(--gh-text-muted); }
+
+.file-row {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--gh-border-muted);
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.file-row:last-child { border-bottom: none; }
+.file-row:hover { background: rgba(177,186,196,0.04); }
+
+.file-icon { color: var(--gh-text-muted); flex-shrink: 0; }
+.file-name { color: var(--gh-text-link); flex: 1; }
+.file-name:hover { text-decoration: underline; }
+.file-msg { color: var(--gh-text-muted); flex: 2; }
+.file-time { color: var(--gh-text-muted); text-align: right; white-space: nowrap; }
+
+/* ── README ────────────────────────────────────────────────────────────────── */
+.readme-box {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  overflow: hidden;
+}
+
+.readme-header {
+  background: #161b22;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--gh-border);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.readme-body {
+  padding: 24px;
+}
+
+.readme-body h1 { font-size: 1.8rem; margin-bottom: 8px; }
+.readme-body h2 { font-size: 1.2rem; margin: 16px 0 8px; border-bottom: 1px solid var(--gh-border); padding-bottom: 4px; }
+.readme-body p { margin-bottom: 12px; color: var(--gh-text); font-size: 14px; line-height: 1.6; }
+.readme-body code {
+  background: rgba(110,118,129,0.4);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 85%;
+}
+.readme-body pre {
+  background: #161b22;
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  padding: 16px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+.readme-body pre code { background: none; padding: 0; }
+.readme-body ul { padding-left: 24px; margin-bottom: 12px; }
+.readme-body li { margin-bottom: 4px; font-size: 14px; color: var(--gh-text); }
+
+/* ── Commit Page ───────────────────────────────────────────────────────────── */
+.commit-header {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #161b22;
+}
+
+.commit-msg-main {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--gh-text);
+}
+
+.commit-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gh-text-muted);
+  flex-wrap: wrap;
+}
+
+.commit-author-avatar {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2, #9b59b6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.commit-hash-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gh-border);
+}
+
+.commit-hash-label { font-size: 12px; color: var(--gh-text-muted); }
+.commit-hash-val {
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 12px;
+  background: rgba(110,118,129,0.2);
+  padding: 2px 8px;
+  border-radius: var(--gh-radius);
+  color: var(--gh-text-link);
+}
+
+.commit-stats {
+  font-size: 13px;
+  color: var(--gh-text-muted);
+  margin-left: auto;
+}
+
+.stat-add { color: var(--gh-green); font-weight: 600; }
+.stat-del { color: var(--gh-red); font-weight: 600; }
+
+/* ── Diff ──────────────────────────────────────────────────────────────────── */
+.diff-file {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.diff-file-header {
+  background: #161b22;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--gh-border);
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 12px;
+  color: var(--gh-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diff-file-header .filepath { font-weight: 600; }
+
+.diff-stats-inline {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.diff-stats-inline .add { color: var(--gh-green); }
+.diff-stats-inline .del { color: var(--gh-red); }
+
+.diff-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.diff-table td { vertical-align: top; }
+
+.diff-ln {
+  width: 1%;
+  min-width: 40px;
+  padding: 0 10px;
+  color: rgba(110,118,129,0.5);
+  text-align: right;
+  background: #0d1117;
+  user-select: none;
+  border-right: 1px solid var(--gh-border-muted);
+}
+
+.diff-code {
+  padding: 0 16px;
+  white-space: pre;
+  color: var(--gh-text);
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.diff-hunk .diff-ln  { background: rgba(130,80,223,0.12); color: #8b949e; }
+.diff-hunk .diff-code { background: rgba(130,80,223,0.12); color: #7ee787; }
+
+.diff-add .diff-ln   { background: rgba(63,185,80,0.15); }
+.diff-add .diff-code { background: rgba(63,185,80,0.15); color: var(--gh-text); }
+.diff-add .diff-code::before { content: '+'; color: var(--gh-green); margin-right: 4px; }
+
+.diff-del .diff-ln   { background: rgba(248,81,73,0.15); }
+.diff-del .diff-code { background: rgba(248,81,73,0.15); color: var(--gh-text); }
+.diff-del .diff-code::before { content: '-'; color: var(--gh-red); margin-right: 4px; }
+
+.diff-ctx .diff-code::before { content: ' '; margin-right: 4px; }
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--gh-bg); }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+.repo-layout {
+  display: grid;
+  grid-template-columns: 1fr 296px;
+  gap: 24px;
+}
+
+.repo-sidebar {}
+
+.sidebar-section {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.sidebar-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gh-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.sidebar-desc {
+  font-size: 13px;
+  color: var(--gh-text);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.topic-tag {
+  display: inline-block;
+  background: rgba(31,111,235,0.15);
+  color: #388bfd;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.sidebar-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gh-text-muted);
+  margin-bottom: 8px;
+}
+
+.sidebar-stat svg { flex-shrink: 0; }
+.sidebar-stat strong { color: var(--gh-text); }
+
+/* ── Commit List ───────────────────────────────────────────────────────────── */
+.commits-list {}
+
+.commit-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #161b22;
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius) var(--gh-radius) 0 0;
+  font-size: 13px;
+  color: var(--gh-text-muted);
+}
+
+.commit-list-item {
+  border: 1px solid var(--gh-border);
+  border-top: none;
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: background 0.1s;
+}
+
+.commit-list-item:hover { background: rgba(177,186,196,0.04); }
+.commit-list-item:last-child { border-radius: 0 0 var(--gh-radius) var(--gh-radius); }
+
+.commit-list-avatar {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2, #9b59b6);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.commit-list-body { flex: 1; }
+
+.commit-list-msg {
+  color: var(--gh-text);
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 4px;
+  text-decoration: none;
+  display: block;
+}
+
+.commit-list-msg:hover { color: var(--gh-text-link); }
+
+.commit-list-meta {
+  font-size: 12px;
+  color: var(--gh-text-muted);
+}
+
+.commit-list-hash {
+  color: var(--gh-text-link);
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 12px;
+  background: rgba(110,118,129,0.2);
+  padding: 2px 8px;
+  border-radius: var(--gh-radius);
+  text-decoration: none;
+  margin-left: auto;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.commit-list-hash:hover { background: rgba(110,118,129,0.3); }

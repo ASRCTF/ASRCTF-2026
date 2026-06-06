@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width:600px;">
+  <h1 style="font-size:22px; font-weight:700; margin-bottom:1.75rem;">New Note</h1>
+  <form action="/note/create" method="POST">
+    <div style="margin-bottom:1.25rem;">
+      <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#444;">Title</label>
+      <input type="text" name="title" required
+        style="width:100%; padding:9px 12px; border:1px solid #d0cec6; border-radius:7px; font-size:15px; outline:none;"
+        placeholder="Note title..." />
+    </div>
+    <div style="margin-bottom:1.25rem;">
+      <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#444;">Content</label>
+      <textarea name="content" rows="10" required
+        style="width:100%; padding:9px 12px; border:1px solid #d0cec6; border-radius:7px; font-size:14px; resize:vertical; font-family:inherit; outline:none;"
+        placeholder="Write your note here..."></textarea>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <button type="submit" class="btn">Save Note</button>
+      <a href="/" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

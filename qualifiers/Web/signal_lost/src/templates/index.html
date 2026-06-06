@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CONTROL PANEL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green: #00ff41;
+      --green-dim: #00aa2a;
+      --green-glow: #00ff4155;
+      --amber: #ffb800;
+      --red: #ff3131;
+      --bg: #020c02;
+      --panel: #040f04;
+      --border: #1a4a1a;
+      --scanline: rgba(0,255,65,0.03);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--green);
+      font-family: 'Share Tech Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        var(--scanline) 3px,
+        var(--scanline) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* CRT vignette */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    @keyframes flicker {
+      0%,100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.85; }
+      94% { opacity: 1; }
+      96% { opacity: 0.9; }
+      97% { opacity: 1; }
+    }
+
+    @keyframes blink {
+      0%,49% { opacity: 1; }
+      50%,100% { opacity: 0; }
+    }
+
+    @keyframes pulse-border {
+      0%,100% { box-shadow: 0 0 8px var(--green-glow), inset 0 0 8px rgba(0,255,65,0.05); }
+      50% { box-shadow: 0 0 18px var(--green-glow), inset 0 0 14px rgba(0,255,65,0.1); }
+    }
+
+    @keyframes sweep {
+      from { transform: scaleX(0); opacity: 1; }
+      to   { transform: scaleX(1); opacity: 0; }
+    }
+
+    @keyframes roll-in {
+      from { transform: translateY(-20px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    .wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px 48px;
+      animation: flicker 8s infinite;
+    }
+
+    header {
+      width: 100%;
+      max-width: 860px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 18px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(22px, 5vw, 38px);
+      letter-spacing: 0.12em;
+      text-shadow: 0 0 20px var(--green), 0 0 40px var(--green-glow);
+      line-height: 1;
+    }
+
+    .logo span {
+      color: var(--amber);
+      text-shadow: 0 0 20px #ffb80088;
+    }
+
+    .status-cluster {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--green-dim);
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: blink 1.2s step-start infinite;
+      margin-right: 6px;
+    }
+
+    .header-sub {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--green-dim);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .deco-bar {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      gap: 4px;
+      margin-bottom: 28px;
+    }
+
+    .deco-seg {
+      height: 3px;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    .deco-seg:nth-child(1) { flex: 3; }
+    .deco-seg:nth-child(2) { flex: 1; background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .deco-seg:nth-child(3) { flex: 6; }
+    .deco-seg:nth-child(4) { flex: 1; background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .deco-seg:nth-child(5) { flex: 2; }
+
+    .panel {
+      width: 100%;
+      max-width: 860px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 24px;
+      position: relative;
+      animation: pulse-border 4s ease-in-out infinite;
+    }
+
+    .card::before, .card::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-color: var(--green);
+      border-style: solid;
+    }
+    .card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    .card-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .card-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--amber), transparent);
+      opacity: 0.4;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--green-dim);
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      background: #000d00;
+      border: 1px solid var(--border);
+      color: var(--green);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      caret-color: var(--green);
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 12px var(--green-glow);
+    }
+
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: #1e4a1e;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    select {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    select option {
+      background: #000d00;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .btn {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      padding: 12px 28px;
+      border: 1px solid;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      height: 100%; width: 0%;
+      background: currentColor;
+      opacity: 0.12;
+      transition: width 0.3s ease;
+    }
+
+    .btn:hover::after { width: 100%; }
+
+    .btn-primary {
+      background: transparent;
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: 0 0 10px var(--green-glow);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 20px var(--green-glow), 0 0 40px rgba(0,255,65,0.2);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border-color: var(--amber);
+      color: var(--amber);
+      box-shadow: 0 0 6px rgba(255,184,0,0.3);
+    }
+
+    .btn-danger {
+      background: transparent;
+      border-color: var(--red);
+      color: var(--red);
+      box-shadow: 0 0 6px rgba(255,49,49,0.3);
+    }
+
+    .output-wrap {
+      position: relative;
+    }
+
+    .output-box {
+      background: #000800;
+      border: 1px solid var(--border);
+      padding: 18px;
+      min-height: 90px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--green);
+      white-space: pre-wrap;
+      word-break: break-all;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .output-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%; width: 100%;
+      background: linear-gradient(to right, transparent, var(--green-glow), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: sweep 1.2s ease-out 0.3s forwards;
+    }
+
+    .output-content {
+      animation: roll-in 0.4s ease-out;
+      display: flex;
+      justify-content: start;
+      height: 100%;
+      position: absolute;
+      inset: 10px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 9px;
+      height: 15px;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: blink 0.8s step-start infinite;
+      vertical-align: middle;
+    }
+
+    .output-meta {
+      margin-top: 10px;
+      font-size: 10px;
+      color: #1e4a1e;
+      letter-spacing: 0.15em;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .gauge-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .gauge {
+      flex: 1;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 10px;
+      color: var(--green-dim);
+      letter-spacing: 0.15em;
+    }
+
+    .gauge-bar {
+      height: 3px;
+      background: var(--border);
+      margin-top: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gauge-fill {
+      height: 100%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    .g1 { width: 72%; }
+    .g2 { width: 45%; background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .g3 { width: 91%; }
+
+    footer {
+      margin-top: 36px;
+      width: 100%;
+      max-width: 860px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #1a401a;
+      letter-spacing: 0.2em;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .coord-bar {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 20px;
+      font-size: 11px;
+      color: #1e4a1e;
+      letter-spacing: 0.18em;
+    }
+
+    .coord-bar span { color: var(--green-dim); }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+        <div class="logo"><span>Signal</span>Lost</div>
+        <div class="status-cluster">
+          <div><span class="status-dot"></span>SYSTEM ONLINE</div>
+          <div>SESSION // ACTIVE</div>
+          <div>NODE: 192.168.0.1</div>
+        </div>
+      </div>
+      <div class="header-sub">// Space Station Control Panel // v2.4.7 //</div>
+    </header>
+
+    <div class="deco-bar">
+      <div class="deco-seg"></div>
+      <div class="deco-seg"></div>
+      <div class="deco-seg"></div>
+      <div class="deco-seg"></div>
+      <div class="deco-seg"></div>
+    </div>
+
+    <div class="coord-bar" style="width:100%;max-width:860px;">
+      <div>LAT: <span>37.774°N</span></div>
+      <div>LON: <span>122.419°W</span></div>
+      <div>ALT: <span>0042M</span></div>
+      <div>FREQ: <span>2.4GHz</span></div>
+    </div>
+    <div class="panel">
+      <div class="card">
+        <div class="card-label">// Payload Insertion</div>
+
+        <form method="POST" action="/send_signal">
+          <div class="input-grid">
+
+            <div class="field-group">
+              <label for="target">Message Title</label>
+              <input type="text" id="target" name="target"
+                placeholder="Title" />
+            </div>
+
+
+            <div class="field-group">
+              <label for="payload">Payload</label>
+              <textarea id="payload" name="payload"
+                placeholder="hello world"></textarea>
+            </div>
+
+            <div class="gauge-row">
+              <div class="gauge">
+                ENCODE
+                <div class="gauge-bar"><div class="gauge-fill g1"></div></div>
+              </div>
+              <div class="gauge">
+                STEALTH
+                <div class="gauge-bar"><div class="gauge-fill g2"></div></div>
+              </div>
+              <div class="gauge">
+                SIGNAL
+                <div class="gauge-bar"><div class="gauge-fill g3"></div></div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="btn-row" style="margin-top:20px;">
+            <button type="submit" class="btn btn-primary">&#9654; EXECUTE</button>
+            <button type="reset" class="btn btn-secondary">&#9632; CLEAR</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card output-wrap">
+        <div class="card-label">// Response Output</div>
+
+        <div class="output-box">
+          <div class="output-content">
+            <p>{% if not reply %}AWAITING TRANSMISSION<span class="cursor"></span>{% endif %}{% if reply %}{{reply}}<span class="cursor"></span>{% endif %}</p>
+          </div>
+        </div>
+
+        <div class="output-meta">
+          <span>STATUS: 200 OK</span>
+          <span>BYTES: 0000</span>
+          <span>TIME: 0.000s</span>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      <span>SignalLost</span>
+      <span>&#169; VOID SYSTEMS</span>
+      <span>UPTIME: 00:00:00</span>
+    </footer>
+  </div>
+</body>
+</html>

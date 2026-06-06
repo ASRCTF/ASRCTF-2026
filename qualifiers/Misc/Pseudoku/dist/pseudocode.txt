@@ -1,0 +1,24 @@
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz{}"
+
+function decrypt(text, key):
+
+    result = ""
+
+    for i from 0 to len(text) - 1:
+
+        c = index_of(text[i], alphabet)
+
+        a = integer(key[i mod len(key)])
+        b = integer(key[(i + 1) mod len(key)])
+
+        shift =
+            (a * b + a + b)
+            mod 54
+
+        p =
+            (c - shift + len(alphabet))
+            mod len(alphabet)
+
+        result += alphabet[p]
+
+    return result
