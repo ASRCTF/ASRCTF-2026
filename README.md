@@ -70,5 +70,3 @@ Official challenge repository for the ASRCTF 2026 Qualifiers and Finals.
 - 📡 OSINT
 - ⚙️ Reverse Engineering
 - 🤖 Miscellaneous
-
-Good luck and have fun hacking! 🚩
