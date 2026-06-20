@@ -59,6 +59,31 @@ Official challenge repository for the ASRCTF 2026 Qualifiers and Finals.
 | 🥉 3 | teachmehow2pwnplz | 4,592 |
 | 4 | fzhshzh | 3,975 |
 
+
+## 🏆 Finals Leaderboard
+
+| Rank | Team Name | Points |
+| ---- | --------- | -----: |
+| 🥇 1 | The city needs me | 13,409 |
+| 🥈 2 | Noob vs Pro vs Hacker vs God | 11,313 |
+| 🥉 3 | YmFzZTY0 | 10,347 |
+| 4 | Winterflake | 10,126 |
+| 5 | 0110 0111 | 8,520 |
+| 6 | palatable | 6,085 |
+| 7 | Jevoyce | 5,942 |
+| 8 | ShinSplitters | 5,235 |
+| 9 | Team Alpha | 4,228 |
+| 10 | LolXD | 3,925 |
+| 11 | Tusoteuthis longa | 3,732 |
+| 12 | half_life3 | 2,289 |
+| 13 | miracle sort | 1,994 |
+| 14 | Now we know how to code two doors in Roblox studio | 1,435 |
+| 15 | blackmarketRAM | 1,362 |
+| 16 | me0w | 1,094 |
+| 17 | RAGdoll | 967 |
+| 18 | random llamas ? | 276 |
+| 19 | horse | 275 |
+
 ---
 
 ## 🎯 Categories
