@@ -60,7 +60,7 @@ Official challenge repository for the ASRCTF 2026 Qualifiers and Finals.
 | 4 | fzhshzh | 3,975 |
 
 
-## 🏆 Finals Leaderboard
+## 🏆 Finals Leaderboard Combined
 
 | Rank | Team Name | Points |
 | ---- | --------- | -----: |
