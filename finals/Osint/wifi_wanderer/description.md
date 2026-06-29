@@ -1,4 +1,4 @@
-Challenge Title: Wifi Wanderer<br>
+Challenge Title: Wifi `Wanderer`<br>
 Author: `Chthonic Cream`<br>
 Description:<br>
 While wandering through the universe, a traveler took two screenshots of their phone's Wi-Fi settings page. However, E*st*n ************ was censored before the photos reached mission control.<br>
